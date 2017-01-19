@@ -53,7 +53,7 @@ class Handler:
             oggpath = text_to_ogg(message, self.settings['tts_id'])
             self.settings['tts_id'] += 1
             try:
-                with open(oggpath) as oggfile:
+                with open(oggpath, 'rb') as oggfile:
                     await self.bot.sendVoice(chat_id, oggfile)
             except Exception as e:
                 print('Couldn\'t send voice: %s' % e)
