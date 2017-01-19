@@ -45,9 +45,10 @@ class Handler:
             return False
     
     async def send_voice(self, chat_id, message):
-        if self.settings['silence'] or self.settings['tts_cooldown']:
+        if self.settings['silence']:
             return True
         success = True
+        oggfile = None
         try:
             oggfile = text_to_ogg(message, self.settings['tts_id'])
             self.settings['tts_id'] += 1
@@ -60,7 +61,8 @@ class Handler:
             print('Text to speech failed: %s' % e)
             success = False
         finally:
-            os.remove(oggfile)
+            if oggfile != None:
+                os.remove(oggfile)
         return success
         
     async def do_handle(self, msg):

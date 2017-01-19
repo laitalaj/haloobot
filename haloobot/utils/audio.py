@@ -1,11 +1,13 @@
 import subprocess
-from os import path, remove
+from os import path, makedirs, remove
 from gtts import gTTS
 
 # Thanks to Kirk Strauser at Stackoverflow
 # You'll need mpg123 and oggenc for this to work, sorry about that
 # TODO: Can this be done asynchronously?
 def text_to_ogg(text, ttsid = 0):
+    if not path.exists(path.join('tts')):
+        makedirs('tts')
     tts = gTTS((text))
     mp3path = path.abspath(path.join('tts', 'tts%s.mp3' % ttsid))
     oggpath = path.abspath(path.join('tts', 'tts%s.ogg' % ttsid))
