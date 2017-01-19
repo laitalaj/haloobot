@@ -1,4 +1,4 @@
-import random, time
+import random, time, asyncio
 from haloobot.utils.messages import do_replaces
 from haloobot.utils.time import get_day_number
 from haloobot.handlers.base import Handler
@@ -45,7 +45,10 @@ class TextHandler(Handler):
             messagestr = ' '.join(message)
             voice_possible = len(messagestr) < 40 and not self.settings['tts_cooldown']
             if voice_possible and random.random() < self.settings['trigger']:
-                temporary_setting_change(self.settings, 'tts_cooldown', True, 600)
+                loop = asyncio.get_event_loop()
+                loop.create_task(
+                    temporary_setting_change(self.settings, 'tts_cooldown', True, 600)
+                    )
                 await self.send_voice(chat_id, messagestr)
             else:
                 await self.send_message(chat_id, messagestr)
