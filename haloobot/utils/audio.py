@@ -20,5 +20,6 @@ def text_to_ogg(text, ttsid = 0):
         if not data:
             break
         outfile.write(data)
+    outfile.close()
     remove(mp3path)
-    return outfile
+    return str(oggpath)
