@@ -33,7 +33,9 @@ if __name__ == '__main__':
         'key': None,
         'password': 'please',
         'trigger': int(tables['settings'].find_one(type = "trigger")['value']) / 100,
-        'silence': True
+        'silence': True,
+        'tts_cooldown': False,
+        'tts_id': 0
         }
     
     if path.isfile('haloosettings'):

@@ -1,4 +1,6 @@
+import os
 from haloobot.utils.dicts import dict_contains_key
+from haloobot.utils.audio import text_to_ogg
 
 class Handler:
     
@@ -41,6 +43,25 @@ class Handler:
         except Exception as e:
             print('Couldn\'t send a sticker: %s' % e)
             return False
+    
+    async def send_voice(self, chat_id, message):
+        if self.settings['silence'] or self.settings['tts_cooldown']:
+            return True
+        success = True
+        try:
+            oggfile = text_to_ogg(message, self.settings['tts_id'])
+            self.settings['tts_id'] += 1
+            try:
+                await self.bot.sendVoice(chat_id, oggfile)
+            except Exception as e:
+                print('Couldn\'t send voice: %s' % e)
+                success = False
+        except Exception as e:
+            print('Text to speech failed: %s' % e)
+            success = False
+        finally:
+            os.remove(oggfile)
+        return success
         
     async def do_handle(self, msg):
         return False

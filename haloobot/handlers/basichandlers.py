@@ -3,6 +3,7 @@ from haloobot.utils.messages import do_replaces
 from haloobot.utils.time import get_day_number
 from haloobot.handlers.base import Handler
 from haloobot.handlers.counters import speakercounters, statcounters
+from haloobot.commands.timecommands import temporary_setting_change
 
 def add_all(handlers, bot, tables, messages, settings):
     SpeakerUpdateHandler(handlers, bot, tables, messages, settings)
@@ -41,7 +42,13 @@ class TextHandler(Handler):
                     speakercounters.update_speaker_triggers(msg, self.tables)
         if message:
             random.shuffle(message)
-            await self.send_message(chat_id, ' '.join(message))
+            messagestr = ' '.join(message)
+            voice_possible = len(messagestr) < 40 and not self.settings['tts_cooldown']
+            if voice_possible and random.random() < self.settings['trigger']:
+                temporary_setting_change(self.settings, 'tts_cooldown', True, 600)
+                await self.send_voice(chat_id, messagestr)
+            else:
+                await self.send_message(chat_id, messagestr)
         return True
 
 
