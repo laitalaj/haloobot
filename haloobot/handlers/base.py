@@ -49,22 +49,40 @@ class Handler:
             return True
         success = True
         oggpath = None
-        try:
-            oggpath = text_to_ogg(message, self.settings['tts_id'])
-            self.settings['tts_id'] += 1
+        if 'message' in self.tables['speeches'].columns:
+            speech = self.tables['speeches'].find_one(message=message)
+        else:
+            speech = None
+        if speech:
             try:
-                with open(oggpath, 'rb') as oggfile:
-                    await self.bot.sendVoice(chat_id, oggfile)
+                print('Sending voice with file ID ...%s' % speech['file_id'][-8:])
+                await self.bot.sendVoice(chat_id, speech['file_id'])
+                return True
             except Exception as e:
                 print('Couldn\'t send voice: %s' % e)
+                return False
+        else:
+            try:
+                oggpath = text_to_ogg(message, self.settings['tts_lang'], self.settings['tts_id'])
+                self.settings['tts_id'] += 1
+                try:
+                    with open(oggpath, 'rb') as oggfile:
+                        print('Sending voice from file %s' % oggpath)
+                        file_id = await self.bot.sendVoice(chat_id, oggfile)
+                        self.tables['speeches'].ïnsert({
+                            'message': message,
+                            'file_id': file_id
+                            })
+                except Exception as e:
+                    print('Couldn\'t send voice: %s' % e)
+                    success = False
+            except Exception as e:
+                print('Text to speech failed: %s' % e)
                 success = False
-        except Exception as e:
-            print('Text to speech failed: %s' % e)
-            success = False
-        finally:
-            if oggpath != None:
-                os.remove(oggpath)
-        return success
+            finally:
+                if oggpath != None:
+                    os.remove(oggpath)
+            return success
         
     async def do_handle(self, msg):
         return False

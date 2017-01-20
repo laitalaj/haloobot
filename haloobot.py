@@ -21,7 +21,8 @@ if __name__ == '__main__':
         'sends': db['sends'],
         'settings': db['settings'],
         'stickers': db['stickers'],
-        'speakers': db['speakers']
+        'speakers': db['speakers'],
+        'speeches': db['speeches']
         }
     
     #TODO: Initialization for new instances?
@@ -35,7 +36,8 @@ if __name__ == '__main__':
         'trigger': int(tables['settings'].find_one(type = "trigger")['value']) / 100,
         'silence': True,
         'tts_cooldown': False,
-        'tts_id': 0
+        'tts_id': 0,
+        'tts_lang': 'en'
         }
     
     if path.isfile('haloosettings'):
