@@ -37,16 +37,22 @@ if __name__ == '__main__':
         'silence': True,
         'tts_cooldown': False,
         'tts_id': 0,
-        'tts_lang': 'en'
+        'tts_lang': ['en']
+        }
+    
+    setting_handlers = {
+        'tts_lang': lambda x: x.replace(' ', '').split(',')
         }
     
     if path.isfile('haloosettings'):
         with open('haloosettings') as haloosettings:
             haloostrings = haloosettings.read().replace(' ', '').split('\n')
             for s in haloostrings:
-                s_parts = s.split('=')
                 try:
-                    settings[s_parts[0]] = s_parts[1]
+                    s_key, s_value = s.split('=')
+                    if s_key in setting_handlers.keys():
+                        s_value = setting_handlers[s_key](s_value)
+                    settings[s_key] = s_value
                 except:
                     print('Badly formatted setting: "%s"' % s)
     

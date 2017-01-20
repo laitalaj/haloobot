@@ -1,4 +1,4 @@
-import os
+import os, random
 from haloobot.utils.dicts import dict_contains_key
 from haloobot.utils.audio import text_to_ogg
 
@@ -49,8 +49,9 @@ class Handler:
             return True
         success = True
         oggpath = None
+        lang = random.choice(self.settings['tts_lang'])
         if 'message' in self.tables['speeches'].columns:
-            speech = self.tables['speeches'].find_one(message=message)
+            speech = self.tables['speeches'].find_one(message=message, language=lang)
         else:
             speech = None
         if speech:
@@ -63,7 +64,7 @@ class Handler:
                 return False
         else:
             try:
-                oggpath = text_to_ogg(message, self.settings['tts_lang'], self.settings['tts_id'])
+                oggpath = text_to_ogg(message, lang, self.settings['tts_id'])
                 self.settings['tts_id'] += 1
                 try:
                     with open(oggpath, 'rb') as oggfile:
@@ -71,7 +72,8 @@ class Handler:
                         response = await self.bot.sendVoice(chat_id, oggfile)
                         self.tables['speeches'].insert({
                             'message': message,
-                            'file_id': response['voice']['file_id']
+                            'file_id': response['voice']['file_id'],
+                            'language': lang
                             })
                 except Exception as e:
                     print('Couldn\'t send voice: %s' % e)
