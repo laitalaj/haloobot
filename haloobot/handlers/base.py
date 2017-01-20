@@ -69,7 +69,7 @@ class Handler:
                     with open(oggpath, 'rb') as oggfile:
                         print('Sending voice from file %s' % oggpath)
                         file_id = await self.bot.sendVoice(chat_id, oggfile)
-                        self.tables['speeches'].ïnsert({
+                        self.tables['speeches'].insert({
                             'message': message,
                             'file_id': file_id
                             })
