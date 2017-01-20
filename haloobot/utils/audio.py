@@ -15,6 +15,7 @@ def text_to_ogg(text, lang = 'en', ttsid = 0):
     frommp3 = subprocess.Popen(['mpg123', '-w', '-', '-'], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
     toogg = subprocess.Popen(['oggenc', '-'], stdin=frommp3.stdout, stdout=subprocess.PIPE)
     tts.write_to_fp(frommp3.stdin)
+    frommp3.stdin.close()
     outfile = open(oggpath, 'wb')
     while True:
         data = toogg.stdout.read(1024 * 100)
