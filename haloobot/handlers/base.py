@@ -68,10 +68,10 @@ class Handler:
                 try:
                     with open(oggpath, 'rb') as oggfile:
                         print('Sending voice from file %s' % oggpath)
-                        file_id = await self.bot.sendVoice(chat_id, oggfile)
+                        response = await self.bot.sendVoice(chat_id, oggfile)
                         self.tables['speeches'].insert({
                             'message': message,
-                            'file_id': file_id
+                            'file_id': response['voice']['file_id']
                             })
                 except Exception as e:
                     print('Couldn\'t send voice: %s' % e)
