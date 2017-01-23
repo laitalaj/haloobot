@@ -1,6 +1,7 @@
-from . import messagecommands, settingscommands, statcommands, utilitycommands, timecommands
+from . import chatcommands, messagecommands, settingscommands, statcommands, utilitycommands, timecommands
 
 def add_all(commands, tables, messages, settings):
+    chatcommands.add_all(commands, tables, messages, settings)
     messagecommands.add_all(commands, tables, messages, settings)
     settingscommands.add_all(commands, tables, messages, settings)
     statcommands.add_all(commands, tables, messages, settings)

@@ -44,12 +44,13 @@ class Handler:
             print('Couldn\'t send a sticker: %s' % e)
             return False
     
-    async def send_voice(self, chat_id, message):
+    async def send_voice(self, chat_id, message, lang=None):
         if self.settings['silence']:
             return True
         success = True
         oggpath = None
-        lang = random.choice(self.settings['tts_lang'])
+        if lang == None:
+            lang = random.choice(self.settings['tts_lang'])
         if 'message' in self.tables['speeches'].columns:
             speech = self.tables['speeches'].find_one(message=message, language=lang)
         else:

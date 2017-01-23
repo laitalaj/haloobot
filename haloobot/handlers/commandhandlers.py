@@ -25,8 +25,18 @@ class CommandHandler(Handler):
             comargs = self.parser.findall(msg['text'])
             if comstring in self.commands.keys():
                 response = self.commands[comstring].run(comargs)
-                if response:
-                    await self.send_message(chat_id, response)         
+                if response and type(response) == tuple:
+                    if response[1] == 'voice':
+                        if len(response) > 2:
+                            await self.send_voice(chat_id, response[0], response[2])
+                        else:
+                            await self.send_voice(chat_id, response[0])
+                    elif response[1] == 'sticker':
+                        await self.send_sticker(chat_id, response[0])
+                    else:
+                        await self.send_message(chat_id, response[0])  
+                elif response:
+                    await self.send_message(chat_id, response)      
             else:
                 print('Skipping unknown command %s' % comstring)
             return True

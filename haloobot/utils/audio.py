@@ -1,6 +1,5 @@
 import subprocess
-from os import path, makedirs, remove
-from io import BytesIO
+from os import path, makedirs
 from gtts import gTTS
 
 # Thanks to Kirk Strauser at Stackoverflow
@@ -10,7 +9,6 @@ def text_to_ogg(text, lang = 'en', ttsid = 0):
     if not path.exists(path.join('tts')):
         makedirs('tts')
     tts = gTTS((text), lang)
-    #mp3path = path.abspath(path.join('tts', 'tts%s.mp3' % ttsid))
     oggpath = path.abspath(path.join('tts', 'tts%s.ogg' % ttsid))
     frommp3 = subprocess.Popen(['mpg123', '-w', '-', '-'], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
     toogg = subprocess.Popen(['oggenc', '-'], stdin=frommp3.stdout, stdout=subprocess.PIPE)
@@ -23,5 +21,4 @@ def text_to_ogg(text, lang = 'en', ttsid = 0):
             break
         outfile.write(data)
     outfile.close()
-    #remove(mp3path)
     return str(oggpath)

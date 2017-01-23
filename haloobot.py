@@ -37,11 +37,13 @@ if __name__ == '__main__':
         'silence': True,
         'tts_cooldown': False,
         'tts_id': 0,
-        'tts_lang': ['en']
+        'tts_lang': ['en'],
+        'tts_cooldown_time': 600
         }
     
     setting_handlers = {
-        'tts_lang': lambda x: x.replace(' ', '').split(',')
+        'tts_lang': lambda x: x.replace(' ', '').split(','),
+        'tts_cooldown_time': lambda x: int(x)
         }
     
     if path.isfile('haloosettings'):

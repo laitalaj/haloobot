@@ -1,9 +1,8 @@
 import random, time, asyncio
 from haloobot.utils.messages import do_replaces
-from haloobot.utils.time import get_day_number
+from haloobot.utils.time import get_day_number, temporary_setting_change
 from haloobot.handlers.base import Handler
 from haloobot.handlers.counters import speakercounters, statcounters
-from haloobot.commands.timecommands import temporary_setting_change
 
 def add_all(handlers, bot, tables, messages, settings):
     SpeakerUpdateHandler(handlers, bot, tables, messages, settings)
@@ -47,7 +46,7 @@ class TextHandler(Handler):
             if voice_possible and random.random() < self.settings['trigger']:
                 loop = asyncio.get_event_loop()
                 loop.create_task(
-                    temporary_setting_change(self.settings, 'tts_cooldown', True, 600)
+                    temporary_setting_change(self.settings, 'tts_cooldown', True, self.settings['tts_cooldown_time'])
                     )
                 await self.send_voice(chat_id, messagestr)
             else:
