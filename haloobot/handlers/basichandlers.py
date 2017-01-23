@@ -42,7 +42,7 @@ class TextHandler(Handler):
         if message:
             random.shuffle(message)
             messagestr = ' '.join(message)
-            voice_possible = len(messagestr) < 40 and not self.settings['tts_cooldown']
+            voice_possible = len(messagestr) < self.settings['tts_max_length'] and not self.settings['tts_cooldown']
             if voice_possible and random.random() < self.settings['trigger']:
                 loop = asyncio.get_event_loop()
                 loop.create_task(

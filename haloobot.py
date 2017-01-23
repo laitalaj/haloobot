@@ -38,12 +38,14 @@ if __name__ == '__main__':
         'tts_cooldown': False,
         'tts_id': 0,
         'tts_lang': ['en'],
+        'tts_max_length': 100,
         'tts_cooldown_time': 600
         }
     
     setting_handlers = {
         'tts_lang': lambda x: x.replace(' ', '').split(','),
-        'tts_cooldown_time': lambda x: int(x)
+        'tts_cooldown_time': lambda x: int(x),
+        'tts_max_length': lambda x: int(x)
         }
     
     if path.isfile('haloosettings'):
