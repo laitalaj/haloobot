@@ -112,7 +112,7 @@ class Handler:
             self.send_message(chat_id, "I don\'t have a clip called %s!" % filename)
             return False
         try:
-            with open(audiopath) as audio:
+            with open(audiopath, 'rb') as audio:
                 await self.bot.sendAudio(chat_id, audio, title = filename)
             return True
         except Exception as e:
