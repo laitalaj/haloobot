@@ -1,4 +1,4 @@
-import random, asyncio
+import random, asyncio, os
 from haloobot.commands.base import Command
 from haloobot.utils.time import temporary_setting_change
 
@@ -26,3 +26,27 @@ class SendVoiceCommand(Command):
             return (args[0], 'voice', lang)
         else:
             return 'Sorry, cooling down (-: (text to speak cooldown is %s seconds)' % self.settings['tts_cooldown_time']
+
+
+class SendAudioCommand(Command):
+    
+    comtext = 'playme'
+    minargs = 1
+    helptext = 'Sends audio clip to chat. Syntax: /playme "[audio clip name]"'
+    
+    def run_command(self, args):
+        return (args[0], 'audio')
+
+class ListAudioCommand(Command):
+    
+    comtext = 'listclips'
+    minargs = 0
+    helptext = 'Lists available audio clips'
+    
+    def run_command(self, args):
+        audiopath = os.path.join('audio')
+        clips = os.listdir(audiopath)
+        if clips:
+            return 'Available clips: ' + ', '.join(clips)
+        else:
+            return 'No audio clips available ):'

@@ -4,7 +4,7 @@ from gtts import gTTS
 
 # Thanks to Kirk Strauser at Stackoverflow
 # You'll need mpg123 and oggenc for this to work, sorry about that
-# TODO: Can this be done asynchronously?
+# TODO: Can this be done asynchronously? -> https://docs.python.org/3/library/asyncio-subprocess.html
 def text_to_ogg(text, lang = 'en', ttsid = 0):
     if not path.exists(path.join('tts')):
         makedirs('tts')

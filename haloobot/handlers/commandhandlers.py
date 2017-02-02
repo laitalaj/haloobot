@@ -33,6 +33,8 @@ class CommandHandler(Handler):
                             await self.send_voice(chat_id, response[0])
                     elif response[1] == 'sticker':
                         await self.send_sticker(chat_id, response[0])
+                    elif response[1] == 'audio':
+                        await self.send_audio(chat_id, response[0])
                     else:
                         await self.send_message(chat_id, response[0])  
                 elif response:

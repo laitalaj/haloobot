@@ -1,4 +1,4 @@
-import os, random
+import os, random, re
 from haloobot.utils.dicts import dict_contains_key
 from haloobot.utils.audio import text_to_ogg
 
@@ -101,6 +101,23 @@ class Handler:
                 if oggpath != None:
                     os.remove(oggpath)
             return success
-        
+    
+    async def send_audio(self, chat_id, filename):
+        if self.settings['silence']:
+            return True
+        trimmer = re.compile('[^\w]+') #Make sure that no-one accesses something they shouldn't
+        filename = trimmer.sub('', filename)
+        audiopath = os.path.join('audio', filename + '.mp3')
+        if not os.path.isfile(audiopath):
+            self.send_message(chat_id, "I don\'t have a clip called %s!" % filename)
+            return False
+        try:
+            with open(audiopath) as audio:
+                await self.bot.sendAudio(chat_id, audio, title = filename)
+            return True
+        except Exception as e:
+            print('Couldnt send audio: %s' % e)
+            return False
+    
     async def do_handle(self, msg):
         return False
