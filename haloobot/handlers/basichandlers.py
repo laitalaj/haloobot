@@ -29,6 +29,9 @@ class TextHandler(Handler):
         text = msg['text'] if 'text' in msg.keys() else ''
         text += msg['caption'] if 'caption' in msg.keys() else ''
         speakercounters.update_speaker_text(msg, self.tables)
+        if len(text) > 4000:
+                print('Skipping too long message...')
+                return False
         message = []
         for t in self.messages.keys():
             match = self.messages[t][0].search(text)

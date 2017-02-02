@@ -28,6 +28,8 @@ class Handler:
         if self.settings['silence']:
             return True
         try:
+            if len(message) > 4000:
+                message = message[:4000]
             await self.bot.sendMessage(chat_id, message)
             return True
         except Exception as e:
