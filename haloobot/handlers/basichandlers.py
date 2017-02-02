@@ -45,6 +45,7 @@ class TextHandler(Handler):
                     if update_stats:
                         statcounters.update_count(t, self.tables)
                         speakercounters.update_speaker_triggers(msg, self.tables)
+        return message
 
     async def do_handle(self, msg):
         chat_id = msg['chat']['id']
