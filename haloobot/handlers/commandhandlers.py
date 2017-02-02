@@ -18,7 +18,7 @@ class CommandHandler(Handler):
         chat_id = msg['chat']['id']
         com = self.commandre.match(msg['text'])
         if com != None:
-            if com.group(2) != '@ha_loo_bot' and com.group(2) != None:
+            if com.group(2) != '@' + self.settings['name'] and com.group(2) != None:
                 print('Skipping command to %s' % com.group(2))
                 return True
             comstring = com.group(1)

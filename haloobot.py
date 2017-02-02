@@ -31,6 +31,7 @@ if __name__ == '__main__':
         tables['settings'].insert({'type': 'trigger', 'value': '33'})
     
     settings = {
+        'name': None,
         'key': None,
         'password': 'please',
         'trigger': int(tables['settings'].find_one(type = "trigger")['value']) / 100,

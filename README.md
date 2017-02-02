@@ -9,6 +9,7 @@ Quickstart:
 3. Create a bot and get yourself a bot API key with @BotFather
   * Make sure to disable group privacy for your bot while you're at it (haloobot won't work otherwise!)
 4. Create a file called 'haloosettings' with contents somewhat like this:
+  * `name = <the username of your bot without the @ symbol>`
   * `key = <your Telegram bot API key>`
   * `password = <password for bot owner specific commands>`
 5. Run haloobot.py
