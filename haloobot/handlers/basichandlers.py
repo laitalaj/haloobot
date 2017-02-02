@@ -8,6 +8,7 @@ def add_all(handlers, bot, tables, messages, settings):
     SpeakerUpdateHandler(handlers, bot, tables, messages, settings)
     TextHandler(handlers, bot, tables, messages, settings)
     StickerHandler(handlers, bot, tables, messages, settings)
+    ReplyHandler(handlers, bot, tables, messages, settings)
     HuomautusHandler(handlers, bot, tables, messages, settings)
 
 class SpeakerUpdateHandler(Handler):
@@ -24,11 +25,11 @@ class TextHandler(Handler):
     handle_keys = ['text', 'caption']
     ignore_keys = []
     
-    async def do_handle(self, msg):
-        chat_id = msg['chat']['id']
+    def process_msg(self, msg, update_stats = True):
         text = msg['text'] if 'text' in msg.keys() else ''
         text += msg['caption'] if 'caption' in msg.keys() else ''
-        speakercounters.update_speaker_text(msg, self.tables)
+        if update_stats:
+            speakercounters.update_speaker_text(msg, self.tables)
         if len(text) > 4000:
                 print('Skipping too long message...')
                 return False
@@ -37,11 +38,17 @@ class TextHandler(Handler):
             match = self.messages[t][0].search(text)
             if match != None:
                 if random.random() > self.settings['trigger']:
-                    statcounters.update_skipped(t, self.tables)
+                    if update_stats:
+                        statcounters.update_skipped(t, self.tables)
                 else:
                     message.append(do_replaces(msg, self.messages[t][1], match))
-                    statcounters.update_count(t, self.tables)
-                    speakercounters.update_speaker_triggers(msg, self.tables)
+                    if update_stats:
+                        statcounters.update_count(t, self.tables)
+                        speakercounters.update_speaker_triggers(msg, self.tables)
+
+    async def do_handle(self, msg):
+        chat_id = msg['chat']['id']
+        message = self.process_msg(msg)
         if message:
             random.shuffle(message)
             messagestr = ' '.join(message)
@@ -95,3 +102,36 @@ class HuomautusHandler(Handler):
                 await self.send_message(chat_id, 'HALOOBOT-HUOMAUTUS: Haluaisin huomauttaa että kello on %s arkipäivä-aamuyöllä. Ehkä kannattaisi mennä nukkumaan?' % time.strftime('%H:%M'))
                 self.settings['time_sent'] = get_day_number()
                 print('Haloobot-huomautus suoritettu!')
+
+
+class ReplyHandler(TextHandler):
+    
+    handle_keys = ['reply_to_message.from.username']
+    ignore_keys = []
+    reply_starts = ['I would like to put emphasis on ',
+                    'I\'d like to add ',
+                    'What about ',
+                    'How about ',
+                    'Have you ever thought about this: ',
+                    'My opinion of your message is ']
+    
+    async def do_handle(self, msg):
+        chat_id = msg['chat']['id']
+        msg_id = msg['message_id']
+        if msg['reply_to_message']['from']['username'] != self.settings['name']:
+            return False
+        oldtrigger = self.settings['trigger']
+        self.settings['trigger'] = 1.0
+        message = self.process_msg(msg, False)
+        self.settings['trigger'] = oldtrigger
+        reply = 'Thank you for replying! '
+        reply += random.choice(self.reply_starts)
+        if message:
+            reply += ' '.join(message)
+        else:
+            reply += 'nothing.'
+        await self.send_reply(chat_id, msg_id, reply)
+        print('Replied to %s' % msg_id)
+        return True
+
+

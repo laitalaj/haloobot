@@ -36,6 +36,19 @@ class Handler:
             print('Couldn\'t send a message: %s' % e)
             return False
         
+    async def send_reply(self, chat_id, reply_to, message):
+        if self.settings['silence']:
+            return True
+        try:
+            if len(message) > 4000:
+                message = message[:4000]
+            await self.bot.sendMessage(chat_id, message, 
+                                       reply_to_message_id = reply_to)
+            return True
+        except Exception as e:
+            print('Couldn\'t send a message: %s' % e)
+            return False
+        
     async def send_sticker(self, chat_id, file_id):
         if self.settings['silence']:
             return True
