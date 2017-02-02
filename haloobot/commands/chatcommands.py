@@ -4,6 +4,8 @@ from haloobot.utils.time import temporary_setting_change
 
 def add_all(commands, tables, messages, settings):
     SendVoiceCommand(commands, tables, messages, settings)
+    SendAudioCommand(commands, tables, messages, settings)
+    ListAudioCommand(commands, tables, messages, settings)
 
 class SendVoiceCommand(Command):
     
@@ -45,6 +47,8 @@ class ListAudioCommand(Command):
     
     def run_command(self, args):
         audiopath = os.path.join('audio')
+        if not os.path.isdir(audiopath):
+            os.makedirs(audiopath)
         clips = os.listdir(audiopath)
         if clips:
             return 'Available clips: ' + ', '.join(clips)
