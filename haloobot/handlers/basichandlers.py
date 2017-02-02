@@ -128,6 +128,7 @@ class ReplyHandler(TextHandler):
         reply = 'Thank you for replying! '
         reply += random.choice(self.reply_starts)
         if message:
+            random.shuffle(message)
             reply += ' '.join(message)
         else:
             reply += 'nothing.'
