@@ -107,17 +107,34 @@ class Handler:
             return True
         trimmer = re.compile('[^\w]+') #Make sure that no-one accesses something they shouldn't
         filename = trimmer.sub('', filename)
-        audiopath = os.path.join('audio', filename + '.mp3')
-        if not os.path.isfile(audiopath):
-            self.send_message(chat_id, "I don\'t have a clip called %s!" % filename)
-            return False
-        try:
-            with open(audiopath, 'rb') as audio:
-                await self.bot.sendAudio(chat_id, audio, title = filename)
-            return True
-        except Exception as e:
-            print('Couldnt send audio: %s' % e)
-            return False
+        if 'name' in self.tables['songs'].columns:
+            song = self.tables['songs'].find_one(name = filename)
+        else:
+            song = None
+        if song:
+            try:
+                print('Sending audio clip %s with file id' % filename)
+                await self.bot.sendVoice(chat_id, song['file_id'])
+                return True
+            except Exception as e:
+                print('Couldn\'t send audio: %s' % e)
+                return False
+        else:
+            audiopath = os.path.join('audio', filename + '.mp3')
+            if not os.path.isfile(audiopath):
+                print('Tried to send a non-existing clip %s' % filename)
+                self.send_message(chat_id, "I don\'t have a clip called %s!" % filename)
+                return False
+            try:
+                with open(audiopath, 'rb') as audio:
+                    print('Sending audio file %s' % filename)
+                    file_id = await self.bot.sendAudio(chat_id, audio, title = filename)
+                    self.tables['songs'].insert({'name': filename,
+                                                 'file_id': file_id})
+                return True
+            except Exception as e:
+                print('Couldnt send audio: %s' % e)
+                return False
     
     async def do_handle(self, msg):
         return False

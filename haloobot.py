@@ -22,7 +22,8 @@ if __name__ == '__main__':
         'settings': db['settings'],
         'stickers': db['stickers'],
         'speakers': db['speakers'],
-        'speeches': db['speeches']
+        'speeches': db['speeches'],
+        'songs': db['songs']
         }
     
     #TODO: Initialization for new instances?
