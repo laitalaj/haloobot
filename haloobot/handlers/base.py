@@ -114,7 +114,7 @@ class Handler:
         if song:
             try:
                 print('Sending audio clip %s with file id' % filename)
-                await self.bot.sendVoice(chat_id, song['file_id'])
+                await self.bot.sendAudio(chat_id, song['file_id'])
                 return True
             except Exception as e:
                 print('Couldn\'t send audio: %s' % e)
