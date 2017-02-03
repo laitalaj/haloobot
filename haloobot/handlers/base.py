@@ -128,9 +128,9 @@ class Handler:
             try:
                 with open(audiopath, 'rb') as audio:
                     print('Sending audio file %s' % filename)
-                    file_id = await self.bot.sendAudio(chat_id, audio, title = filename)
+                    response = await self.bot.sendAudio(chat_id, audio, title = filename)
                     self.tables['songs'].insert({'name': filename,
-                                                 'file_id': file_id})
+                                                 'file_id': response['audio']['file_id']})
                 return True
             except Exception as e:
                 print('Couldnt send audio: %s' % e)
