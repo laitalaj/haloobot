@@ -1,4 +1,4 @@
-import random, time, asyncio, datetime
+import random, time, asyncio
 from haloobot.utils.messages import do_replaces
 from haloobot.utils.time import get_day_number, temporary_setting_change
 from haloobot.utils.food import getmenu
@@ -95,6 +95,7 @@ class HuomautusHandler(Handler):
     def __init__(self, handlers, bot, tables, messages, settings):
         super().__init__(handlers, bot, tables, messages, settings)
         self.settings['time_sent'] = get_day_number() - 1
+        self.settings['food_time_sent'] = get_day_number() - 1
     
     async def do_handle(self, msg):
         chat_id = msg['chat']['id']
