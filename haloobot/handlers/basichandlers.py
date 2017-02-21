@@ -1,6 +1,7 @@
-import random, time, asyncio
+import random, time, asyncio, datetime
 from haloobot.utils.messages import do_replaces
 from haloobot.utils.time import get_day_number, temporary_setting_change
+from haloobot.utils.food import getmenu
 from haloobot.handlers.base import Handler
 from haloobot.handlers.counters import speakercounters, statcounters
 
@@ -98,11 +99,18 @@ class HuomautusHandler(Handler):
     async def do_handle(self, msg):
         chat_id = msg['chat']['id']
         t = time.localtime()
-        if t.tm_wday in (0, 1, 2, 3, 4) and t.tm_hour in (1, 2, 3, 4):
+        if t.tm_wday in (0, 1, 2, 3, 4) and t.tm_hour in (2, 3, 4):
             if self.settings['time_sent'] < get_day_number():
                 await self.send_message(chat_id, 'HALOOBOT-HUOMAUTUS: Haluaisin huomauttaa että kello on %s arkipäivä-aamuyöllä. Ehkä kannattaisi mennä nukkumaan?' % time.strftime('%H:%M'))
                 self.settings['time_sent'] = get_day_number()
                 print('Haloobot-huomautus suoritettu!')
+        if t.tm_wday in (0, 1, 2, 3, 4) and t.tm_hour in (8, 9, 10, 11):
+            if self.settings['food_time_sent'] < get_day_number():
+                await self.send_message(chat_id, 'HALOOBOT-HUOMAUTUS: Haluaisin huomauttaa että exactumissa on tänään tarjolla:' + getmenu() + 'Muistathan syödä kasvaaksesi isoksi!')
+                self.settings['food_time_sent'] = get_day_number()
+                print('Haloobot-huomautus suoritettu!')
+
+
 
 
 class ReplyHandler(TextHandler):
