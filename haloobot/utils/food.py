@@ -1,7 +1,7 @@
 import urllib.request
 
 def getmenu():
-	contents = (
+    contents = (
         urllib.request.urlopen('http://prototyping.xyz/unicafe/generator')
         .read()
         .decode('UTF-8')
