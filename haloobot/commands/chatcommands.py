@@ -1,11 +1,13 @@
 import random, asyncio, os
 from haloobot.commands.base import Command
 from haloobot.utils.time import temporary_setting_change
+from haloobot.utils.food import getmenu
 
 def add_all(commands, tables, messages, settings):
     SendVoiceCommand(commands, tables, messages, settings)
     SendAudioCommand(commands, tables, messages, settings)
     ListAudioCommand(commands, tables, messages, settings)
+    GetMenuCommand(commands, tables, messages, settings)
 
 class SendVoiceCommand(Command):
     
@@ -54,3 +56,13 @@ class ListAudioCommand(Command):
             return 'Available clips: ' + ', '.join(map(lambda x: x.split('.')[0], clips))
         else:
             return 'No audio clips available ):'
+
+
+class GetMenuCommand(Command):
+    
+    comtext = 'getmenu'
+    minargs = 0
+    helptext = 'Get today\'s Unicafe menu. 100% accurate'
+    
+    def run_command(self, args):
+        return 'Tänään tarjolla: ' + getmenu()

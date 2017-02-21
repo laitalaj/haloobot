@@ -1,6 +1,7 @@
 import urllib.request
 
 def getmenu():
+    #TODO: Async get this
     contents = (
         urllib.request.urlopen('http://prototyping.xyz/unicafe/generator')
         .read()
