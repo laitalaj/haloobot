@@ -85,7 +85,7 @@ class StickerHandler(Handler):
                 if emoji in '();/*-': # Should hinder any SQL injetions in case someone manages to feed non-emojis through the api
                     continue
                 try:
-                    to_send = self.tables['db'].query('SELECT * FROM stickers WHERE emoji LIKE %{}% ORDER BY RANDOM() LIMIT 1'.format(emoji)).next()
+                    to_send = self.tables['db'].query('SELECT * FROM stickers WHERE emoji LIKE \'%{}%\' ORDER BY RANDOM() LIMIT 1'.format(emoji)).next()
                 except StopIteration:
                     pass
             if to_send == None:
