@@ -85,12 +85,15 @@ class StickerHandler(Handler):
                 if emoji in '();/*-': # Should hinder any SQL injetions in case someone manages to feed non-emojis through the api
                     continue
                 try:
-                    to_send = self.tables['db'].query('SELECT * FROM stickers WHERE emoji LIKE \'%{}%\' ORDER BY RANDOM() LIMIT 1'.format(emoji)).next()
+                    results = self.tables['db'].query('SELECT * FROM stickers WHERE emoji LIKE \'%{}%\' ORDER BY RANDOM()'.format(emoji))
+                    to_send = results.next()
+                    while to_send['file_id'] == sticker['file_id']:
+                        to_send = results.next()
                 except StopIteration:
                     pass
             if to_send == None:
                 to_send = self.tables['db'].query('SELECT * FROM stickers ORDER BY RANDOM() LIMIT 1').next()
-                print('Didn\'t find any stickers with matching emoji >:')
+                print('Didn\'t find any differing stickers with matching emoji >:')
             await self.send_sticker(chat_id, to_send['file_id'])
             print('Sent sticker ...%s as a reply to ...%s' % (to_send['file_id'][-8:], sticker['file_id'][-8:]))
             speakercounters.update_speaker_triggers(msg, self.tables)
