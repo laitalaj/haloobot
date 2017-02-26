@@ -90,7 +90,7 @@ class StickerHandler(Handler):
                     while to_send['file_id'] == sticker['file_id']:
                         to_send = results.next()
                 except StopIteration:
-                    pass
+                    to_send = None
             if to_send == None:
                 to_send = self.tables['db'].query('SELECT * FROM stickers ORDER BY RANDOM() LIMIT 1').next()
                 print('Didn\'t find any differing stickers with matching emoji >:')
