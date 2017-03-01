@@ -38,9 +38,9 @@ class CommandHandler(Handler):
                     elif response[1] == 'download': # (file_id, 'download', file_type, filename, success_message, fail_message) 
                         success = await self.download_file(response[0], response[2], response[3])
                         if success:
-                            self.send_message(chat_id, response[4])
+                            await self.send_message(chat_id, response[4])
                         else:
-                            self.send_message(chat_id, response[5])
+                            await self.send_message(chat_id, response[5])
                     else:
                         await self.send_message(chat_id, response[0])  
                 elif response:

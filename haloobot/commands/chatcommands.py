@@ -54,7 +54,7 @@ class ListAudioCommand(Command):
             os.makedirs(audiopath)
         clips = os.listdir(audiopath)
         if clips:
-            return 'Available clips: ' + ', '.join(map(lambda x: x.split('.')[0], clips))
+            return 'Available clips: ' + ', '.join(sorted(map(lambda x: x.split('.')[0], clips)))
         else:
             return 'No audio clips available ):'
 
