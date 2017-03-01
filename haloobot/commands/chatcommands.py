@@ -8,6 +8,7 @@ def add_all(commands, tables, messages, settings):
     SendAudioCommand(commands, tables, messages, settings)
     ListAudioCommand(commands, tables, messages, settings)
     GetMenuCommand(commands, tables, messages, settings)
+    AddAudioCommand(commands, tables, messages, settings)
 
 class SendVoiceCommand(Command):
     
