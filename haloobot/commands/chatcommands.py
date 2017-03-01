@@ -49,7 +49,7 @@ class ListAudioCommand(Command):
     
     def run_command(self, args):
         audiopath = os.path.join('audio')
-        if not os.path.isdir(audiopath):
+        if not os.path.isdir(audiopath): # TODO: Move this to some place where it makes more sense?
             os.makedirs(audiopath)
         clips = os.listdir(audiopath)
         if clips:
@@ -57,6 +57,21 @@ class ListAudioCommand(Command):
         else:
             return 'No audio clips available ):'
 
+class AddAudioCommand(Command):
+    
+    comtext = 'addclip'
+    minargs = 1
+    helptext = 'Adds audio clip. Use by replying to an audio message with /addclip "[clip name]"'
+    requires_message = True
+    
+    def run_command(self, args, msg):
+        if 'reply_to_message' not in msg:
+            return 'To use addclip, please reply to the audio message containing the clip!'
+        original_msg = msg['reply_to_message']
+        if 'audio' not in original_msg:
+            return 'That message doesn\'t contain an audio clip!'
+        audio = original_msg['audio']
+        return (audio['file_id'], 'download', 'audio', args[0], 'Audio clip %s downloaded!' % args[0], 'Couldn\'t download the clip >:')
 
 class GetMenuCommand(Command):
     

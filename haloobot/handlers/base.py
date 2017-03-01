@@ -136,5 +136,30 @@ class Handler:
                 print('Couldnt send audio: %s' % e)
                 return False
     
+    async def download_file(self, file_id, file_type, filename):
+        if file_type == 'audio':
+            if not os.path.exists(os.path.join('audio')):
+                os.makedirs('audio')
+            dest = os.path.join('audio', filename + '.mp3')
+            if os.path.exists(dest): #TODO: Refactor
+                print('Tried to overwrite a file!')
+                return False
+            self.tables['songs'].insert({'name': filename,
+                                         'file_id': file_id})
+        else:
+            if not os.path.exists(os.path.join('etc')):
+                os.makedirs('etc')
+            dest = os.path.join('etc', filename)
+            if os.path.exists(dest):
+                print('Tried to overwrite a file!')
+                return False
+        try:
+            await self.bot.download_file(file_id, dest)
+            print('Downloaded ...%s to %s!' % (file_id[-8:], dest))
+        except Exception as e:
+            print('Couldn\'t download file ...%s to %s - %s' % (file_id[-8:], dest, e))
+            return False
+        return True
+    
     async def do_handle(self, msg):
         return False
