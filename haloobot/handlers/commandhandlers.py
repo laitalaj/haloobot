@@ -24,7 +24,7 @@ class CommandHandler(Handler):
             comstring = com.group(1)
             comargs = self.parser.findall(msg['text'])
             if comstring in self.commands.keys():
-                response = self.commands[comstring].run(comargs)
+                response = self.commands[comstring].run(comargs, msg)
                 if response and type(response) == tuple:
                     if response[1] == 'voice': # (message, 'voice', <language>)
                         if len(response) > 2:
