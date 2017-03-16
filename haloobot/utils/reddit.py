@@ -20,6 +20,8 @@ async def get_random_image_post(subreddit):
       meme_attempts = 0
 
       while True:
+        if meme_attempts > 20:
+            return ("Unable to fetch meme >:", None)
         if meme_attempts > 0:
           print("Retrying meme fetch... (attempt #{})".format(meme_attempts))
         meme_attempts += 1
