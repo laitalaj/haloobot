@@ -49,11 +49,12 @@ class Handler:
             print('Couldn\'t send a message: %s' % e)
             return False
         
-    async def send_sticker(self, chat_id, file_id):
+    async def send_sticker(self, chat_id, file_id, reply_to = None): #TODO: Get rid of that send_reply and use instead something like this in send_message
         if self.settings['silence']:
             return True
         try:
-            await self.bot.sendSticker(chat_id, file_id)
+            await self.bot.sendSticker(chat_id, file_id,
+                                       reply_to_message_id = reply_to)
             return True
         except Exception as e:
             print('Couldn\'t send a sticker: %s' % e)
