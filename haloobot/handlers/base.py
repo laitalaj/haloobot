@@ -59,6 +59,16 @@ class Handler:
             print('Couldn\'t send a sticker: %s' % e)
             return False
     
+    async def send_image(self, chat_id, file_id, caption = None):
+        if self.settings['silence']:
+            return True
+        try:
+            await self.bot.sendPhoto(chat_id, file_id, caption)
+            return True
+        except Exception as e:
+            print('Couldn\'t send a image: %s' % e)
+            return False
+    
     async def send_voice(self, chat_id, message, lang=None):
         if self.settings['silence']:
             return True

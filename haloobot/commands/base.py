@@ -1,3 +1,5 @@
+from inspect import iscoroutinefunction
+
 class Command:
     
     comtext = ''
@@ -15,13 +17,17 @@ class Command:
         self.messages = messages
         self.settings = settings
     
-    def run(self, args, msg = None):
+    async def run(self, args, msg = None):
         if len(args) < self.minargs:
             return self.helptext
+        methodArgs = None
         if self.requires_message:
-            return self.run_command(args, msg)
+            methodArgs = (args, msg)
         else:
-            return self.run_command(args)
-    
+            methodArgs = (args,)
+        if iscoroutinefunction(self.run_command):
+            return await self.run_command(*methodArgs)
+        return self.run_command(*methodArgs)
+
     def run_command(self, args, msg = None):
         return ''

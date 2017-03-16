@@ -2,6 +2,7 @@ import random, asyncio, os
 from haloobot.commands.base import Command
 from haloobot.utils.time import temporary_setting_change
 from haloobot.utils.food import getmenu
+from haloobot.utils.reddit import get_random_meme
 
 def add_all(commands, tables, messages, settings):
     SendVoiceCommand(commands, tables, messages, settings)
@@ -9,6 +10,7 @@ def add_all(commands, tables, messages, settings):
     ListAudioCommand(commands, tables, messages, settings)
     GetMenuCommand(commands, tables, messages, settings)
     AddAudioCommand(commands, tables, messages, settings)
+    GetMemeCommand(commands, tables, messages, settings)
 
 class SendVoiceCommand(Command):
     
@@ -82,3 +84,13 @@ class GetMenuCommand(Command):
     
     def run_command(self, args):
         return 'Tänään tarjolla: ' + getmenu()
+
+class GetMemeCommand(Command):
+
+    comtext = 'getmeme'
+    minargs = 0
+    helptext = 'Get a random fresh new meme from Reddit. You can optionally specify the subreddit with /getmeme "[subreddit]".'
+
+    async def run_command(self, args):
+        meme_file_name, meme_file = await get_random_meme(args[0] if len(args) > 0 else None)
+        return (meme_file, meme_file_name, None)
