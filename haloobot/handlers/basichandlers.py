@@ -4,6 +4,7 @@ from haloobot.utils.time import get_day_number, temporary_setting_change
 from haloobot.utils.food import getmenu
 from haloobot.handlers.base import Handler
 from haloobot.handlers.counters import speakercounters, statcounters
+from haloobot.utils.dicts import dict_contains_key
 
 def add_all(handlers, bot, tables, messages, settings):
     SpeakerUpdateHandler(handlers, bot, tables, messages, settings)
@@ -50,6 +51,8 @@ class TextHandler(Handler):
 
     async def do_handle(self, msg):
         chat_id = msg['chat']['id']
+        if dict_contains_key(msg, 'reply_to_message.from.username') and msg['reply_to_message']['from']['username'] == self.settings['name']:
+            return False
         message = self.process_msg(msg)
         if message:
             random.shuffle(message)
