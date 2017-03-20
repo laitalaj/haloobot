@@ -30,7 +30,8 @@ async def get_random_image_post(subreddit):
           post = body[0]['data']['children'][0]['data']
           if is_image_post(post):
             meme_url = post['url']
-            return (meme_url.split("/")[-1], meme_url)
+            meme_title = post['title']
+            return (meme_url.split("/")[-1], '"%s"\n%s' % (meme_title, meme_url)) 
 
 async def get_random_meme(subreddit = None):
   if subreddit is None:
