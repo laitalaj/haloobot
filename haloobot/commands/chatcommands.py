@@ -11,6 +11,7 @@ def add_all(commands, tables, messages, settings):
     GetMenuCommand(commands, tables, messages, settings)
     AddAudioCommand(commands, tables, messages, settings)
     GetMemeCommand(commands, tables, messages, settings)
+    AddMemeSourceCommand(commands, tables, messages, settings)
 
 class SendVoiceCommand(Command):
     
@@ -92,5 +93,20 @@ class GetMemeCommand(Command):
     helptext = 'Get a random fresh new meme from Reddit. You can optionally specify the subreddit with /getmeme "[subreddit]".'
 
     async def run_command(self, args):
-        meme_file_name, meme_file = await get_random_meme(args[0] if len(args) > 0 else None)
+        meme_file_name, meme_file = await get_random_meme(subreddit = args[0] if len(args) > 0 else None, db = self.tables['db'])
         return (meme_file, meme_file_name, None)
+
+class AddMemeSourceCommand(Command):
+    
+    comtext = 'addsource'
+    minargs = 1
+    helptext = 'Add a source for random fresh may mays. Usage: /addsource "[subreddit]"'
+    
+    async def run_command(self, args):
+        if self.tables['sources'].find_one(name = args[0]) != None:
+            return '%s is already a source for dank may mays.' % args[0]
+        meme_file_name, meme_file = await get_random_meme(subreddit = args[0])
+        if meme_file_name == None:
+            return 'No memes found in %s - try again if you are sure that there are some!' % args[0]
+        self.tables['sources'].insert({'name': args[0]})
+        return ('Added %s - an example meme below!\n' % args[0]) + meme_file

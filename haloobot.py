@@ -23,7 +23,8 @@ if __name__ == '__main__':
         'stickers': db['stickers'],
         'speakers': db['speakers'],
         'speeches': db['speeches'],
-        'songs': db['songs']
+        'songs': db['songs'],
+        'sources': db['sources']
         }
     
     #TODO: Initialization for new instances?

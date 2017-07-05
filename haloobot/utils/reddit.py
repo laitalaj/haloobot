@@ -1,13 +1,6 @@
 from random import randint
 import aiohttp, json.decoder
 
-subreddits = [
-  "meirl",
-  "me_irl",
-  "dankmemes",
-  "2meirl4meirl"
-]
-
 image_types = ["png", "jpg", "gif"]
 
 def is_image_post(post):
@@ -33,7 +26,18 @@ async def get_random_image_post(subreddit):
             meme_title = post['title']
             return (meme_url.split("/")[-1], '"%s"\n%s' % (meme_title, meme_url)) 
 
-async def get_random_meme(subreddit = None):
-  if subreddit is None:
-    subreddit = subreddits[randint(0, len(subreddits) - 1)]
-  return await get_random_image_post(subreddit)
+async def get_random_meme(subreddit = None, db = None):
+  if subreddit is None and db != None:
+    subs = db.query('SELECT name FROM sources ORDER BY RANDOM() LIMIT 3')
+  elif subreddit != None:
+    subs = iter([{'name': subreddit}])
+  else:
+    return (None, 'No subreddit or db provided >: (this should not happen!)')
+  res = (None, 'Unexpectedly unable to fetch meme >>:')
+  try:
+    while res[0] == None:
+        subreddit = next(subs)['name']
+        res = await get_random_image_post(subreddit)
+    return res
+  except StopIteration:
+    return res
