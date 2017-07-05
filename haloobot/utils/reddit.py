@@ -20,7 +20,10 @@ async def get_random_image_post(subreddit):
         meme_attempts += 1
         async with session.get(url) as res:
           body = await res.json()
-          post = body[0]['data']['children'][0]['data']
+          try:
+              post = body[0]['data']['children'][0]['data']
+          except KeyError:
+              return (None, "404'd trying to fetch from %s" % subreddit)
           if is_image_post(post):
             meme_url = post['url']
             meme_title = post['title']

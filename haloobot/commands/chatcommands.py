@@ -12,6 +12,7 @@ def add_all(commands, tables, messages, settings):
     AddAudioCommand(commands, tables, messages, settings)
     GetMemeCommand(commands, tables, messages, settings)
     AddMemeSourceCommand(commands, tables, messages, settings)
+    ListMemeSourcesCommand(commands, tables, messages, settings)
 
 class SendVoiceCommand(Command):
     
@@ -109,4 +110,15 @@ class AddMemeSourceCommand(Command):
         if meme_file_name == None:
             return 'No memes found in %s - try again if you are sure that there are some!' % args[0]
         self.tables['sources'].insert({'name': args[0]})
-        return ('Added %s - an example meme below!\n' % args[0]) + meme_file
+        print('Adding %s as meme source...' % args[0])
+        return ('Added %s as a meme source - an example meme below!\n' % args[0]) + meme_file
+
+
+class ListMemeSourcesCommand(Command):
+    
+    comtext = 'listsources'
+    minargs = 0
+    helptext = 'List meme sources'
+    
+    def run_command(self, args):
+        return 'Meme sources:\n' + '\n'.join(map(lambda s: s['name'], self.tables['sources'].all()))
