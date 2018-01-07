@@ -7,6 +7,7 @@ if __name__ == '__main__':
     import dataset
     import asyncio
     import sys
+    import time
     import haloobot.handlers
     from os import path
     
@@ -80,6 +81,8 @@ if __name__ == '__main__':
     command_handler = haloobot.handlers.get_command_handler(bot, tables, regex_to_message, settings)
     
     async def handle(msg):
+        if time.time() - msg['date'] > 60*60: # Skip messages that are older than one hour
+            return
         if not await command_handler.handle(msg):
             for h in handlers:
                 await h.handle(msg)
