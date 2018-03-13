@@ -1,4 +1,5 @@
 import random, asyncio, os
+from subprocess import check_output
 from haloobot.commands.base import Command
 from haloobot.utils.time import temporary_setting_change
 from haloobot.utils.food import getmenu
@@ -13,6 +14,7 @@ def add_all(commands, tables, messages, settings):
     GetMemeCommand(commands, tables, messages, settings)
     AddMemeSourceCommand(commands, tables, messages, settings)
     ListMemeSourcesCommand(commands, tables, messages, settings)
+    FortuneCowCommand(commands, tables, messages, settings)
 
 class SendVoiceCommand(Command):
     
@@ -122,3 +124,15 @@ class ListMemeSourcesCommand(Command):
     
     def run_command(self, args):
         return 'Meme sources:\n' + '\n'.join(map(lambda s: s['name'], self.tables['sources'].all()))
+
+
+class FortuneCowCommand(Command):
+
+    comtext = 'fortune'
+    minargs = 0
+    helptext = 'returns your fortune in cow format'
+
+    def run_command(self, args):
+        fortune = args[0] if len(args) >= 1 else check_output(['fortune'])
+        cow = check_output(['cowsay', fortune])
+        return '```' + cow.decode() + '```'
