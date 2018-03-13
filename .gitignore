@@ -2,6 +2,9 @@
 .project
 .pydevproject
 
+# visual studio code
+.vscode/*
+
 # Instance-specific haloobot stuff
 haloosettings
 *.db
