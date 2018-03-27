@@ -131,7 +131,7 @@ class FortuneCowCommand(Command):
 
     comtext = 'fortune'
     minargs = 0
-    helptext = 'returns your fortune in cow format'
+    helptext = 'Returns your fortune in cow format. Usage: /fortune "[optional cowsay]"'
 
     def run_command(self, args):
         fortune = args[0] if len(args) >= 1 else check_output(['fortune'])
