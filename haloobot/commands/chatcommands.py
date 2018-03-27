@@ -10,7 +10,6 @@ def add_all(commands, tables, messages, settings):
     SendVoiceCommand(commands, tables, messages, settings)
     SendAudioCommand(commands, tables, messages, settings)
     ListAudioCommand(commands, tables, messages, settings)
-    GetMenuCommand(commands, tables, messages, settings)
     GetExcuseCommand(commands, tables, messages, settings)
     AddAudioCommand(commands, tables, messages, settings)
     GetMemeCommand(commands, tables, messages, settings)
@@ -81,15 +80,6 @@ class AddAudioCommand(Command):
             return 'That message doesn\'t contain an audio clip!'
         audio = original_msg['audio']
         return (audio['file_id'], 'download', 'audio', args[0], 'Audio clip %s downloaded!' % args[0], 'Couldn\'t download the clip >:')
-
-class GetMenuCommand(Command):
-    
-    comtext = 'getmenu'
-    minargs = 0
-    helptext = 'Get today\'s Unicafe menu. 100% accurate'
-    
-    def run_command(self, args):
-        return 'Tänään tarjolla: ' + getmenu()
 
 class GetExcuseCommand(Command):
 
