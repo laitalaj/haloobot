@@ -2,7 +2,6 @@ import random, asyncio, os
 from subprocess import check_output
 from haloobot.commands.base import Command
 from haloobot.utils.time import temporary_setting_change
-from haloobot.utils.food import getmenu
 from haloobot.utils.reddit import get_random_meme
 from haloobot.utils.excuse import getexcuse
 
