@@ -30,7 +30,7 @@ class Handler:
         try:
             if len(message) > 4000:
                 message = message[:4000]
-            await self.bot.sendMessage(chat_id, message)
+            await self.bot.sendMessage(chat_id, message, parse_mode = "Markdown")
             return True
         except Exception as e:
             print('Couldn\'t send a message: %s' % e)
