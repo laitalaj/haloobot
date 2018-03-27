@@ -134,7 +134,7 @@ class FortuneCowCommand(Command):
     
     COWEYES = [
         'b', 'd', 'g', 'p', 's', 't', 'w', 'y', #Standard
-        'e ^^', 'e ಠಠ' #Custom
+        'e^^', 'eಠಠ' #Custom
     ]
 
     def run_command(self, args):
