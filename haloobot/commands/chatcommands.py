@@ -1,18 +1,21 @@
 import random, asyncio, os
+from subprocess import check_output
 from haloobot.commands.base import Command
 from haloobot.utils.time import temporary_setting_change
 from haloobot.utils.food import getmenu
 from haloobot.utils.reddit import get_random_meme
+from haloobot.utils.excuse import getexcuse
 
 def add_all(commands, tables, messages, settings):
     SendVoiceCommand(commands, tables, messages, settings)
     SendAudioCommand(commands, tables, messages, settings)
     ListAudioCommand(commands, tables, messages, settings)
-    GetMenuCommand(commands, tables, messages, settings)
+    GetExcuseCommand(commands, tables, messages, settings)
     AddAudioCommand(commands, tables, messages, settings)
     GetMemeCommand(commands, tables, messages, settings)
     AddMemeSourceCommand(commands, tables, messages, settings)
     ListMemeSourcesCommand(commands, tables, messages, settings)
+    FortuneCowCommand(commands, tables, messages, settings)
 
 class SendVoiceCommand(Command):
     
@@ -78,14 +81,14 @@ class AddAudioCommand(Command):
         audio = original_msg['audio']
         return (audio['file_id'], 'download', 'audio', args[0], 'Audio clip %s downloaded!' % args[0], 'Couldn\'t download the clip >:')
 
-class GetMenuCommand(Command):
-    
-    comtext = 'getmenu'
+class GetExcuseCommand(Command):
+
+    comtext = 'getexcuse'
     minargs = 0
-    helptext = 'Get today\'s Unicafe menu. 100% accurate'
-    
+    helptext = '''Get an excuse as to why you're code a shit'''
+
     def run_command(self, args):
-        return 'Tänään tarjolla: ' + getmenu()
+        return getexcuse()
 
 class GetMemeCommand(Command):
 
@@ -122,3 +125,15 @@ class ListMemeSourcesCommand(Command):
     
     def run_command(self, args):
         return 'Meme sources:\n' + '\n'.join(map(lambda s: s['name'], self.tables['sources'].all()))
+
+
+class FortuneCowCommand(Command):
+
+    comtext = 'fortune'
+    minargs = 0
+    helptext = 'Returns your fortune in cow format. Usage: /fortune "[optional cowsay]"'
+
+    def run_command(self, args):
+        fortune = args[0] if len(args) >= 1 else check_output(['fortune'])
+        cow = check_output(['cowsay', fortune])
+        return '```' + cow.decode() + '```'
