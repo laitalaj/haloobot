@@ -4,12 +4,14 @@ from haloobot.commands.base import Command
 from haloobot.utils.time import temporary_setting_change
 from haloobot.utils.food import getmenu
 from haloobot.utils.reddit import get_random_meme
+from haloobot.utils.excuse import getexcuse
 
 def add_all(commands, tables, messages, settings):
     SendVoiceCommand(commands, tables, messages, settings)
     SendAudioCommand(commands, tables, messages, settings)
     ListAudioCommand(commands, tables, messages, settings)
     GetMenuCommand(commands, tables, messages, settings)
+    GetExcuseCommand(commands, tables, messages, settings)
     AddAudioCommand(commands, tables, messages, settings)
     GetMemeCommand(commands, tables, messages, settings)
     AddMemeSourceCommand(commands, tables, messages, settings)
@@ -88,6 +90,15 @@ class GetMenuCommand(Command):
     
     def run_command(self, args):
         return 'Tänään tarjolla: ' + getmenu()
+
+class GetExcuseCommand(Command):
+
+    comtext = 'getexcuse'
+    minargs = 0
+    helptext = '''Get an excuse as to why you're code a shit'''
+
+    def run_command(self, args):
+        return getexcuse()
 
 class GetMemeCommand(Command):
 
