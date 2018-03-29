@@ -131,8 +131,13 @@ class FortuneCowCommand(Command):
     comtext = 'fortune'
     minargs = 0
     helptext = 'Returns your fortune in cow format. Usage: /fortune "[optional cowsay]"'
+    
+    COWEYES = [
+        'b', 'd', 'g', 'p', 's', 't', 'w', 'y', #Standard
+        'e^^', 'eಠಠ' #Custom
+    ]
 
     def run_command(self, args):
-        fortune = args[0] if len(args) >= 1 else check_output(['fortune'])
-        cow = check_output(['cowsay', fortune])
+        fortune = args[0] if len(args) >= 1 else check_output(['fortune', '-a'])
+        cow = check_output(['cowsay', '-{}'.format(random.choice(self.COWEYES)), fortune])
         return '```' + cow.decode() + '```'
