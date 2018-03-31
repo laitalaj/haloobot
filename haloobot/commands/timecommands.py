@@ -1,10 +1,14 @@
 import asyncio
+from dateutil import parser as dateparser
 from haloobot.commands.base import Command
-from haloobot.utils.time import temporary_setting_change
+from haloobot.utils.time import temporary_setting_change, get_upcoming_events_string
 
 def add_all(commands, tables, messages, settings):
     PartyModeCommand(commands, tables, messages, settings)
     SleepCommand(commands, tables, messages, settings)
+    AddEventCommand(commands, tables, messages, settings)
+    RemoveEventCommand(commands, tables, messages, settings)
+    GetUpcomingCommand(commands, tables, messages, settings)
 
 class PartyModeCommand(Command):
     
@@ -46,3 +50,61 @@ class SleepCommand(Command):
             )
         print('Sleep mode activated!')
         return 'Sleep mode activated for %s minutes.' % time
+
+class AddEventCommand(Command):
+
+    comtext = 'addevent'
+    minargs = 2
+    helptext = 'Add an event. Syntax: /addevent "[event name]" "[next event date]" "[optional: event countdown in days]"'
+    requires_message = True
+
+    def run_command(self, args, msg):
+        name = args[0]
+        nextdate = args[1]
+        countdown = args[2] if len(args) > 2 else 0
+        try:
+            nextdate = dateparser.parse(nextdate, dayfirst=True, yearfirst=False)
+        except ValueError:
+            print('Failed to parse {} when trying to add schedule'.format(nextdate))
+            return 'Parser couldn\'t recognize the date format given >:'
+        nextdate = nextdate.date()
+        try:
+            self.tables['schedules'].insert({
+                'chat_id': msg['chat']['id'],
+                'name': name,
+                'nextdate': nextdate,
+                'countdown': countdown
+            })
+        except Exception as e:
+            print(e)
+            return 'Something went wrong when trying to add the schedule >:'
+        return 'Added event {}!'.format(name)
+
+class RemoveEventCommand(Command):
+
+    comtext = 'removeevent'
+    minargs = 1
+    helptext = 'Remove an event. Syntax: /removeevent "[event name]"'
+    requires_message = True
+
+    def run_command(self, args, msg):
+        name = args[0]
+        chatid = msg['chat']['id']
+        try:
+            self.tables['schedules'].delete(name=name, chat_id=chatid)
+        except Exception as e:
+            print('{} when trying to delete {}/{}'.format(e, name, chatid))
+            return 'Couldn\'t delete {} >:'.format(name)
+        return '{} deleted!'.format(name)
+
+class GetUpcomingCommand(Command):
+
+    comtext = 'getupcoming'
+    minargs = 0
+    helptext = 'Get upcoming events.'
+    requires_message = True
+
+    def run_command(self, args, msg):
+        ret = get_upcoming_events_string(self.tables['schedules'], msg['chat']['id'])
+        print('Gave upcoming events!')
+        return ret if ret else 'No upcoming events today.'
