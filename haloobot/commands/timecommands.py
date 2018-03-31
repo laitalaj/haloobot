@@ -67,6 +67,11 @@ class AddEventCommand(Command):
         except ValueError:
             print('Failed to parse {} when trying to add schedule'.format(nextdate))
             return 'Parser couldn\'t recognize the date format given >:'
+        try:
+            countdown = int(countdown)
+        except ValueError:
+            print('Failed to parse countdown {}'.format(countdown))
+            return 'Invalid countdown!'
         nextdate = nextdate.date()
         try:
             self.tables['schedules'].insert({
