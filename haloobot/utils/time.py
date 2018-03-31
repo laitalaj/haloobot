@@ -35,7 +35,7 @@ def get_upcoming_events(schedules_table, chat_id):
         elif eventdate == today:
             events_today.append(event['name'])
         elif eventdate - relativedelta(days=event['countdown']) < today:
-            events_upcoming.append(event['countdown'], event['name'])
+            events_upcoming.append((event['countdown'], event['name']))
     return (events_today, sorted(events_upcoming))
 
 def get_upcoming_events_string(schedules_table, chat_id):
