@@ -1,9 +1,8 @@
 import time, asyncio
-from datetime import date
+from datetime import date, datetime
 from random import choice
 from emoji import emojize
 from dateutil.relativedelta import *
-from dateutil import parser as dateparser
 
 EVENT_EMOJIS = (':tada:', ':confetti_ball:', ':beers:', ':bottle_with_popping_cork:', ':clinking_glasses:')
 
@@ -28,7 +27,7 @@ def get_upcoming_events(schedules_table, chat_id):
     events_upcoming = []
     for event in schedules_table.find(chat_id=chat_id):
         # Doing this with a for-loop because dates in sqlite are a bit of a pain
-        eventdate = dateparser.parse(event['nextdate']).date()
+        eventdate = datetime.strptime(event['nextdate'], '%Y-%m-%d').date()
         if eventdate < today:
             eventdate += relativedelta(years=+1)
             event['nextdate'] = eventdate
