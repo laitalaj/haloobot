@@ -5,8 +5,8 @@ from haloobot.utils import time
 
 class ScheduleHandler(Handler):
 
-    SCHEDULE_TIME = "10:00"
-    SLEEP_TIME = 10*60
+    SCHEDULE_TIME = "12:00"
+    MAX_SLEEP_TIME = 60*60
 
     def __init__(self, handlers, bot, tables, messages, settings):
         super().__init__(handlers, bot, tables, messages, settings)
@@ -15,7 +15,7 @@ class ScheduleHandler(Handler):
     async def schedule_loop(self):
         while True:
             schedule.run_pending()
-            await asyncio.sleep(self.SLEEP_TIME)
+            await asyncio.sleep(min(self.MAX_SLEEP_TIME, schedule.idle_seconds()))
     
     async def send_to_all(self):
         for result in self.tables['db'].query('SELECT DISTINCT chat_id FROM schedules'):
