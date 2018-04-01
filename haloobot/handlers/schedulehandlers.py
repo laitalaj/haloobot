@@ -5,12 +5,14 @@ from haloobot.utils import time
 
 class ScheduleHandler(Handler):
 
-    SCHEDULE_TIME = "12:00"
+    SCHEDULE_TIME = "12:15"
     MAX_SLEEP_TIME = 60*60
 
     def __init__(self, handlers, bot, tables, messages, settings):
         super().__init__(handlers, bot, tables, messages, settings)
-        schedule.every().day.at(self.SCHEDULE_TIME).do(self.send_to_all)
+        schedule.every().day.at(self.SCHEDULE_TIME).do(
+            lambda: asyncio.get_event_loop().create_task(self.send_to_all())
+            )
     
     async def schedule_loop(self):
         while True:
