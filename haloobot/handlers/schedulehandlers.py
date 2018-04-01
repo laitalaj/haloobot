@@ -5,7 +5,7 @@ from haloobot.utils import time
 
 class ScheduleHandler(Handler):
 
-    SCHEDULE_TIME = "12:40"
+    SCHEDULE_TIME = "10:00"
     MAX_SLEEP_TIME = 60*60
 
     def __init__(self, handlers, bot, tables, messages, settings):
