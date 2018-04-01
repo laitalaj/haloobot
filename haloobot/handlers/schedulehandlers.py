@@ -5,7 +5,7 @@ from haloobot.utils import time
 
 class ScheduleHandler(Handler):
 
-    SCHEDULE_TIME = "12:15"
+    SCHEDULE_TIME = "12:40"
     MAX_SLEEP_TIME = 60*60
 
     def __init__(self, handlers, bot, tables, messages, settings):
@@ -26,7 +26,7 @@ class ScheduleHandler(Handler):
     async def send_upcoming(self, chat_id):
         ret = time.get_upcoming_events_string(self.tables['schedules'], chat_id)
         if ret:
-            return await self.send_message(chat_id, '\n'.join(ret))
+            return await self.send_message(chat_id, ret)
         else:
             return False
 
