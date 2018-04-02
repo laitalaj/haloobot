@@ -29,9 +29,12 @@ def get_upcoming_events(schedules_table, chat_id):
         # Doing this with a for-loop because dates in sqlite are a bit of a pain
         eventdate = datetime.strptime(event['nextdate'], '%Y-%m-%d').date()
         if eventdate < today:
-            eventdate += relativedelta(years=+1)
-            event['nextdate'] = eventdate
-            schedules_table.update(event, ['id'])
+            if event['oneoff']:
+                schedules_table.delete(**event)
+            else:
+                eventdate += relativedelta(years=+1)
+                event['nextdate'] = eventdate
+                schedules_table.update(event, ['id'])
         elif eventdate == today:
             events_today.append(event['name'])
         elif eventdate - relativedelta(days=event['countdown']) < today:

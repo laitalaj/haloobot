@@ -7,6 +7,8 @@ def add_all(commands, tables, messages, settings):
     PartyModeCommand(commands, tables, messages, settings)
     SleepCommand(commands, tables, messages, settings)
     AddEventCommand(commands, tables, messages, settings)
+    AddOneOffEventCommand(commands, tables, messages, settings)
+    ListEventsCommand(commands, tables, messages, settings)
     RemoveEventCommand(commands, tables, messages, settings)
     GetUpcomingCommand(commands, tables, messages, settings)
 
@@ -57,6 +59,7 @@ class AddEventCommand(Command):
     minargs = 2
     helptext = 'Add an event. Syntax: /addevent "[event name]" "[next event date]" "[optional: event countdown in days]"'
     requires_message = True
+    is_oneoff = False
 
     def run_command(self, args, msg):
         name = args[0]
@@ -78,12 +81,21 @@ class AddEventCommand(Command):
                 'chat_id': msg['chat']['id'],
                 'name': name,
                 'nextdate': nextdate,
-                'countdown': countdown
+                'countdown': countdown,
+                'oneoff': self.is_oneoff
             })
         except Exception as e:
             print(e)
             return 'Something went wrong when trying to add the schedule >:'
         return 'Added event {}!'.format(name)
+
+class AddOneOffEventCommand(AddEventCommand):
+
+    comtext = 'addoneoff'
+    minargs = 2
+    helptext = 'Adds an one-off event. Syntax: /addevent "[event name]" "[event date]" "[optional: event countdown in days]"'
+    requires_message = True
+    is_oneoff = True
 
 class RemoveEventCommand(Command):
 
@@ -101,6 +113,21 @@ class RemoveEventCommand(Command):
             print('{} when trying to delete {}/{}'.format(e, name, chatid))
             return 'Couldn\'t delete {} >:'.format(name)
         return '{} deleted!'.format(name)
+
+class ListEventsCommand(Command):
+
+    comtext = 'listevents'
+    minargs = 0
+    helptext = 'List all events for this chat'
+    requires_message = True
+
+    def run_command(self, args, msg):
+        res = []
+        for event in self.tables['schedules'].find(chat_id=msg['chat']['id']):
+            countdown_str = ', countdown {} days'.format(event['countdown']) if event['countdown'] else ''
+            oneoff_str = ' (one-off)' if event['oneoff'] else ''
+            res.append('{}: {}{}{}'.format(event['nextdate'], event['name'], countdown_str, oneoff_str))
+        return '\n'.join(res) if res else 'No events scheduled!'
 
 class GetUpcomingCommand(Command):
 
