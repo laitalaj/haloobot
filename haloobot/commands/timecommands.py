@@ -127,7 +127,7 @@ class ListEventsCommand(Command):
             countdown_str = ', countdown {} days'.format(event['countdown']) if event['countdown'] else ''
             oneoff_str = ' (one-off)' if event['oneoff'] else ''
             res.append('{}: {}{}{}'.format(event['nextdate'], event['name'], countdown_str, oneoff_str))
-        return '\n'.join(res) if res else 'No events scheduled!'
+        return '\n'.join(sorted(res)) if res else 'No events scheduled!'
 
 class GetUpcomingCommand(Command):
 
