@@ -25,7 +25,8 @@ if __name__ == '__main__':
         'speakers': db['speakers'],
         'speeches': db['speeches'],
         'songs': db['songs'],
-        'sources': db['sources']
+        'sources': db['sources'],
+        'schedules': db['schedules']
         }
     
     #TODO: Initialization for new instances?
@@ -75,10 +76,11 @@ if __name__ == '__main__':
     print("Initializing bot with key %s..." % settings['key'])
     bot = telepot.aio.Bot(settings['key'])
     
-    print('Preparing message handling...')
+    print('Preparing message and schedule handling...')
     handlers = []
     haloobot.handlers.add_all(handlers, bot, tables, regex_to_message, settings)
     command_handler = haloobot.handlers.get_command_handler(bot, tables, regex_to_message, settings)
+    schedule_handler = haloobot.handlers.get_schedule_handler(bot, tables, regex_to_message, settings)
     
     async def handle(msg):
         if time.time() - msg['date'] > 60*60: # Skip messages that are older than one hour
@@ -90,6 +92,7 @@ if __name__ == '__main__':
     print('Launching bot...')
     loop = asyncio.get_event_loop()
     loop.create_task(bot.message_loop(handle))
+    loop.create_task(schedule_handler.schedule_loop())
     
     print('--- READY TO MEME ---')
     loop.run_forever()
