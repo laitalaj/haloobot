@@ -140,4 +140,4 @@ class FortuneCowCommand(Command):
     def run_command(self, args):
         fortune = args[0] if len(args) >= 1 else check_output(['fortune', '-a'])
         cow = check_output(['cowsay', '-{}'.format(random.choice(self.COWEYES)), fortune])
-        return '```' + cow.decode() + '```'
+        return ('```' + cow.decode() + '```', 'Markdown')
