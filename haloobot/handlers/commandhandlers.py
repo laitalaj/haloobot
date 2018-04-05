@@ -46,6 +46,8 @@ class CommandHandler(Handler):
                             await self.send_message(chat_id, response[4])
                         else:
                             await self.send_message(chat_id, response[5])
+                    elif len(response) > 1:
+                        await self.send_message(chat_id, response[0], parse_mode = response[1])
                     else:
                         await self.send_message(chat_id, response[0])  
                 elif response:
