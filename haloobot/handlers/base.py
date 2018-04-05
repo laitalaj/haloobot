@@ -24,13 +24,13 @@ class Handler:
             if dict_contains_key(msg, k):
                 return await self.do_handle(msg)
     
-    async def send_message(self, chat_id, message):
+    async def send_message(self, chat_id, message, parse_mode = None):
         if self.settings['silence']:
             return True
         try:
             if len(message) > 4000:
                 message = message[:4000]
-            await self.bot.sendMessage(chat_id, message, parse_mode = "Markdown")
+            await self.bot.sendMessage(chat_id, message, parse_mode=parse_mode)
             return True
         except Exception as e:
             print('Couldn\'t send a message: %s' % e)
