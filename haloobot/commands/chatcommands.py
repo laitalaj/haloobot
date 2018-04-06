@@ -96,8 +96,8 @@ class GetMemeCommand(Command):
     helptext = 'Get a random fresh new meme from Reddit. You can optionally specify the subreddit with /getmeme "[subreddit]".'
 
     async def run_command(self, args):
-        meme_file_name, meme_file = await get_random_meme(subreddit = args[0] if len(args) > 0 else None, db = self.tables['db'])
-        return (meme_file, meme_file_name, None)
+        _, meme_msg = await get_random_meme(subreddit = args[0] if len(args) > 0 else None, db = self.tables['db'])
+        return meme_msg
 
 class AddMemeSourceCommand(Command):
     
