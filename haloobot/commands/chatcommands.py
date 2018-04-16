@@ -150,5 +150,5 @@ class FingerporiCommand(Command):
     minargs = 0
     helptext = 'Gives you today\'s fingerpori'
 
-    def run_command(self, args):
-        return get_newest_fingerpori()
+    async def run_command(self, args):
+        return await get_newest_fingerpori()
