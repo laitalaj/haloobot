@@ -1,5 +1,5 @@
 from html.parser import HTMLParser
-import urllib3
+import aiohttp
 import re
 
 class MyHTMLParser(HTMLParser):
@@ -16,13 +16,13 @@ class MyHTMLParser(HTMLParser):
                         print(value)
                         self.output = value
 
-def get_newest_fingerpori():
-    http = urllib3.PoolManager()
-    r = http.request('GET', 'http://www.kaleva.fi/fingerpori/')
-    print(r.status)
-    
-    parser = MyHTMLParser()
-    parser.feed(r.data.decode('utf-8'))
-    return parser.output
+async def get_newest_fingerpori():
+    async with aiohttp.ClientSession() as http:
+        async with http.get('http://www.kaleva.fi/fingerpori/') as r:
+            print(r.status)
+            parser = MyHTMLParser()
+            parser.feed(r.data.decode('utf-8'))
+            return parser.output
 
-get_newest_fingerpori()
+if __name__ == '__main__:
+    await get_newest_fingerpori()
