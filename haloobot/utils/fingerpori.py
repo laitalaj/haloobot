@@ -21,7 +21,7 @@ async def get_newest_fingerpori():
         async with http.get('http://www.kaleva.fi/fingerpori/') as r:
             print(r.status)
             parser = MyHTMLParser()
-            parser.feed(r.data.decode('utf-8'))
+            parser.feed(await r.text())
             return parser.output
 
 if __name__ == '__main__:
