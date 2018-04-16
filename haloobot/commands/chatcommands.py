@@ -4,6 +4,7 @@ from haloobot.commands.base import Command
 from haloobot.utils.time import temporary_setting_change
 from haloobot.utils.reddit import get_random_meme
 from haloobot.utils.excuse import getexcuse
+from haloobot.utils.fingerpori import get_newest_fingerpori
 
 def add_all(commands, tables, messages, settings):
     SendVoiceCommand(commands, tables, messages, settings)
@@ -15,6 +16,7 @@ def add_all(commands, tables, messages, settings):
     AddMemeSourceCommand(commands, tables, messages, settings)
     ListMemeSourcesCommand(commands, tables, messages, settings)
     FortuneCowCommand(commands, tables, messages, settings)
+    FingerporiCommand(commands, tables, messages, settings)
 
 class SendVoiceCommand(Command):
     
@@ -141,3 +143,12 @@ class FortuneCowCommand(Command):
         fortune = args[0] if len(args) >= 1 else check_output(['fortune', '-a'])
         cow = check_output(['cowsay', '-{}'.format(random.choice(self.COWEYES)), fortune])
         return ('```' + cow.decode() + '```', 'Markdown')
+
+class FingerporiCommand(Command):
+
+    comtext = 'fingerpori'
+    minargs = 0
+    helptext = 'Gives you today\'s fingerpori'
+
+    def run_command(self, args):
+        return get_newest_fingerpori()
