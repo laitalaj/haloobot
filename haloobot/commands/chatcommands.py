@@ -151,4 +151,4 @@ class FingerporiCommand(Command):
     helptext = 'Gives you today\'s fingerpori'
 
     async def run_command(self, args):
-        return await get_newest_fingerpori()
+        return (await get_newest_fingerpori(), 'image')
