@@ -24,5 +24,5 @@ async def get_newest_fingerpori():
             parser.feed(await r.text())
             return parser.output
 
-if __name__ == '__main__:
+if __name__ == '__main__':
     await get_newest_fingerpori()
