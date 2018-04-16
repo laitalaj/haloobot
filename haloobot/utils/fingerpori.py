@@ -23,6 +23,3 @@ async def get_newest_fingerpori():
             parser = MyHTMLParser()
             parser.feed(await r.text())
             return parser.output
-
-if __name__ == '__main__':
-    await get_newest_fingerpori()
