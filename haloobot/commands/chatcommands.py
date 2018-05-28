@@ -162,4 +162,4 @@ class MattoCommand(Command):
     helptext = 'Moro dude :D mitä dude.'
 
     async def run_command(self, args):
-        return getmatto()
+        return await getmatto()
