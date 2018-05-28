@@ -5,6 +5,7 @@ from haloobot.utils.time import temporary_setting_change
 from haloobot.utils.reddit import get_random_meme
 from haloobot.utils.excuse import getexcuse
 from haloobot.utils.fingerpori import get_newest_fingerpori
+from haloobot.utils.aijamatto import getmatto
 
 def add_all(commands, tables, messages, settings):
     SendVoiceCommand(commands, tables, messages, settings)
@@ -17,6 +18,7 @@ def add_all(commands, tables, messages, settings):
     ListMemeSourcesCommand(commands, tables, messages, settings)
     FortuneCowCommand(commands, tables, messages, settings)
     FingerporiCommand(commands, tables, messages, settings)
+    MattoCommand(commands, tables, messages, settings)
 
 class SendVoiceCommand(Command):
     
@@ -152,3 +154,12 @@ class FingerporiCommand(Command):
 
     async def run_command(self, args):
         return (await get_newest_fingerpori(), 'image')
+
+class MattoCommand(Command):
+
+    comtext = 'dudecarpet'
+    minargs = 0
+    helptext = 'Moro dude :D mitä dude.'
+
+    async def run_command(self, args):
+        return await getmatto()
