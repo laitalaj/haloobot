@@ -4,7 +4,7 @@ from haloobot.commands.base import Command
 from haloobot.utils.time import temporary_setting_change
 from haloobot.utils.reddit import get_random_meme
 from haloobot.utils.excuse import getexcuse
-from haloobot.utils.fingerpori import get_newest_fingerpori, get_newest_fingerpori_b
+from haloobot.utils.fingerpori import get_newest_fingerpori, get_newest_fingerpori_b, get_random_fingerpori
 from haloobot.utils.aijamatto import getmatto
 
 def add_all(commands, tables, messages, settings):
@@ -19,6 +19,7 @@ def add_all(commands, tables, messages, settings):
     FortuneCowCommand(commands, tables, messages, settings)
     FingerporiCommand(commands, tables, messages, settings)
     FingerporiBCommand(commands, tables, messages, settings)
+    RandomPoriCommand(commands, tables, messages, settings)
     MattoCommand(commands, tables, messages, settings)
 
 class SendVoiceCommand(Command):
@@ -164,6 +165,15 @@ class FingerporiBCommand(Command):
 
     async def run_command(self, args):
         return (await get_newest_fingerpori_b(), 'image')
+
+class RandomPoriCommand(Command):
+
+    comtext = 'randompori'
+    minargs = 0
+    helptext = 'Gives you a random Fingerpori'
+
+    async def run_command(self, args):
+        return (await get_random_fingerpori(), 'image')
 
 class MattoCommand(Command):
 
