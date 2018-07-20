@@ -4,4 +4,5 @@ telepot
 gtts
 emoji
 python-dateutil
-schedule 
+schedule
+beautifulsoup4
