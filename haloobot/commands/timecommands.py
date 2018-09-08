@@ -48,7 +48,7 @@ class SleepCommand(Command):
                 return '%s is not a valid amount of minutes' % args[0]
         loop = asyncio.get_event_loop()
         loop.create_task(
-            temporary_setting_change(self.settings, 'trigger', 1.0, time * 60)
+            temporary_setting_change(self.settings, 'trigger', 0.0, time * 60)
             )
         print('Sleep mode activated!')
         return 'Sleep mode activated for %s minutes.' % time
