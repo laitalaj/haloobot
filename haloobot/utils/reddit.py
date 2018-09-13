@@ -23,7 +23,7 @@ async def get_random_image_post(subreddit):
           try:
               post = body[0]['data']['children'][0]['data']
           except KeyError:
-              return (None, "404'd trying to fetch from %s" % subreddit)
+              return (None, "%s'd trying to fetch from %s" % (res.status, subreddit))
           if is_image_post(post):
             meme_url = post['url']
             meme_title = post['title']
