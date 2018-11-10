@@ -1,0 +1,8 @@
+sqlalchemy>=1.1.6,<1.2
+dataset
+telepot
+gtts
+emoji
+python-dateutil
+schedule
+beautifulsoup4
