@@ -56,7 +56,7 @@ class TextHandler(Handler):
             random.shuffle(message)
             messagestr = ' '.join(message)
             voice_possible = len(messagestr) < self.settings['tts_max_length'] and not self.settings['tts_cooldown']
-            if voice_possible and random.random() < self.settings['trigger']:
+            if voice_possible and random.random() < max(self.settings['trigger'], 0.5):
                 loop = asyncio.get_event_loop()
                 loop.create_task(
                     temporary_setting_change(self.settings, 'tts_cooldown', True, self.settings['tts_cooldown_time'])
