@@ -78,6 +78,7 @@ if __name__ == '__main__':
     
     print('Preparing message and schedule handling...')
     handlers = []
+    #pylint: disable=E1101
     haloobot.handlers.add_all(handlers, bot, tables, regex_to_message, settings)
     command_handler = haloobot.handlers.get_command_handler(bot, tables, regex_to_message, settings)
     schedule_handler = haloobot.handlers.get_schedule_handler(bot, tables, regex_to_message, settings)

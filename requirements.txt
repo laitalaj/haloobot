@@ -6,3 +6,4 @@ emoji
 python-dateutil
 schedule
 beautifulsoup4
+gitpython

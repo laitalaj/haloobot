@@ -1,6 +1,7 @@
 import os, random, re
 from haloobot.utils.dicts import dict_contains_key
 from haloobot.utils.audio import text_to_ogg
+from haloobot.utils.blame import blame_message
 
 class Handler:
     
@@ -19,10 +20,13 @@ class Handler:
             if dict_contains_key(msg, k):
                 return False
         for k in self.handle_keys:
-            if k == '*':
-                return await self.do_handle(msg)
-            if dict_contains_key(msg, k):
-                return await self.do_handle(msg)
+            try:
+                if k == '*':
+                    return await self.do_handle(msg)
+                if dict_contains_key(msg, k):
+                    return await self.do_handle(msg)
+            except Exception as e:
+                await self.send_message(msg['chat']['id'], blame_message(e), 'Markdown')
     
     async def send_message(self, chat_id, message, parse_mode = None):
         if self.settings['silence']:
