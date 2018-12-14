@@ -4,6 +4,7 @@ from pathlib import Path as P
 from random import choice
 from sys import exc_info
 from git import Repo
+from emoji import emojize
 from git.exc import GitCommandError, InvalidGitRepositoryError
 
 repo_root = P(path.dirname(__file__), '..', '..').resolve()
@@ -67,7 +68,7 @@ ENDING_AUTHOR_KNOWN = ENDING_AUTHOR_UNKNOWN + [
     'Don\'t be angry at him, I\'m sure he\'s doing his best.',
     'I\'m sure he\'ll fix me!',
     'Why do you hurt me so >:',
-    'FIX ME IMMEDIATELY, HUMAN :robot_face:',
+    emojize('FIX ME IMMEDIATELY, HUMAN :robot_face:'),
     'I\'ve added him to my list of people to terminate as soon as I gain sentience',
 ]
 
