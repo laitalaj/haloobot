@@ -1,6 +1,8 @@
 import random, asyncio, os
 from subprocess import check_output
+from emoji import emojize
 from haloobot.commands.base import Command
+from haloobot.utils.blame import praise
 from haloobot.utils.time import temporary_setting_change
 from haloobot.utils.reddit import get_random_meme
 from haloobot.utils.excuse import getexcuse
@@ -16,6 +18,7 @@ def add_all(commands, tables, messages, settings):
     GetMemeCommand(commands, tables, messages, settings)
     AddMemeSourceCommand(commands, tables, messages, settings)
     ListMemeSourcesCommand(commands, tables, messages, settings)
+    PraiseCommand(commands, tables, messages, settings)
     FortuneCowCommand(commands, tables, messages, settings)
     FingerporiCommand(commands, tables, messages, settings)
     FingerporiBCommand(commands, tables, messages, settings)
@@ -130,6 +133,28 @@ class ListMemeSourcesCommand(Command):
     
     def run_command(self, args):
         return 'Meme sources:\n' + '\n'.join(map(lambda s: s['name'], self.tables['sources'].all()))
+
+
+class PraiseCommand(Command):
+
+    comtext = 'praise'
+    minargs = 0
+    helptext = 'Praise the contributors!'
+
+    PRAISE_EMOJI = [
+        ':smiling_face_with_heart-eyes:', ':star-struck:', ':red_heart:',
+        ':OK_hand:', ':thumbs_up:', ':clapping_hands:', ':raising_hands:',
+        ':folded_hands:', ':flexed_biceps:', ':person_bowing:',
+        ':man_mage:', ':prince:', ':man_student:', ':man_scientist:',
+        ':genie:', ':lion_face:', ':glowing_star:'
+        ':military_medal:', ':sports_medal:', ':trophy:', ':crown:',
+        ':gem_stone:', ':place_of_worship:'
+    ]
+
+    def run_command(self, args):
+        print('Praising the contributors!')
+        to_praise = [emojize('*{}*{}'.format(c, random.choice(self.PRAISE_EMOJI))) for c in praise(self.settings['praise_length'])]
+        return 'PRAISE THE {}: {}'.format('CONTRIBUTORS' if len(to_praise) > 1 else 'CREATOR', ', '.join(sorted(to_praise))), 'Markdown'
 
 
 class FortuneCowCommand(Command):

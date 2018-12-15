@@ -4,7 +4,10 @@ from random import choice
 from emoji import emojize
 from dateutil.relativedelta import *
 
-EVENT_EMOJIS = (':tada:', ':confetti_ball:', ':beers:', ':bottle_with_popping_cork:', ':clinking_glasses:')
+EVENT_EMOJIS = (
+    ':tada:', ':confetti_ball:', ':beers:', ':bottle_with_popping_cork:', 
+    ':clinking_glasses:', ':man_dancing', ':people_with_bunny_ears:'
+    )
 
 def get_day_number():
     t = time.localtime()
@@ -27,7 +30,7 @@ def get_upcoming_events(schedules_table, chat_id):
     events_upcoming = []
     for event in schedules_table.find(chat_id=chat_id):
         # Doing this with a for-loop because dates in sqlite are a bit of a pain
-        eventdate = datetime.strptime(event['nextdate'], '%Y-%m-%d').date()
+        eventdate = datetime.strptime(event['nextdate'], '%Y-%m-%d').date() #pylint: disable=E1101
         if eventdate < today:
             if event['oneoff']:
                 schedules_table.delete(**event)

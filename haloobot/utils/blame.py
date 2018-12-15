@@ -29,6 +29,10 @@ def blame(exception):
         return path.relpath(filename, repo_root), line, author
     return None, None, None
 
+def praise(iter_length = 10):
+    if not use_blame: return None
+    return set([commit.author.name for commit in repo.iter_commits('master', max_count = iter_length)])
+
 START_PARTS = [
     'Uh-oh! There was an uncaught exception!',
     'I tried to do my job but then encountered an uncaught exception!',

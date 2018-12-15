@@ -2,7 +2,7 @@ sqlalchemy>=1.1.6,<1.2
 dataset>=0.8.0,<1.0
 telepot
 gtts
-emoji
+emoji==0.5.1
 python-dateutil
 schedule
 beautifulsoup4

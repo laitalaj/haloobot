@@ -41,6 +41,7 @@ if __name__ == '__main__':
         'password': 'please',
         'trigger': int(tables['settings'].find_one(type = "trigger")['value']) / 100,
         'silence': True,
+        'praise_length': 50,
         'tts_cooldown': False,
         'tts_id': 0,
         'tts_lang': ['en'],
