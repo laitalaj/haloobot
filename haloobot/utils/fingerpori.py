@@ -6,7 +6,7 @@ from random import randint
 previous_fingerporis = 480
 
 def parse_hs_fingerpori_url(soup):
-    return 'https:' + soup.find(class_='cartoon').noscript.img.get('src')
+    return 'https:' + soup.find(class_='cartoon').img.get("data-srcset").split()[0]
 
 async def _do_get_fingerpori(url, get_comic_url):
     async with aiohttp.ClientSession() as http:

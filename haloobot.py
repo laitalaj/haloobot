@@ -8,6 +8,7 @@ if __name__ == '__main__':
     import asyncio
     import sys
     import time
+    import signal
     import haloobot.handlers
     from os import path
     
@@ -94,6 +95,10 @@ if __name__ == '__main__':
     loop = asyncio.get_event_loop()
     loop.create_task(bot.message_loop(handle))
     loop.create_task(schedule_handler.schedule_loop())
-    
+
+    # Enable SIGINT handler so that the bot can be closed with ctrl-C on Windows
+    # See https://stackoverflow.com/a/37420223
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
+
     print('--- READY TO MEME ---')
     loop.run_forever()
