@@ -46,7 +46,10 @@ if __name__ == '__main__':
         'tts_id': 0,
         'tts_lang': ['en'],
         'tts_max_length': 100,
-        'tts_cooldown_time': 600
+        'tts_cooldown_time': 600,
+        'last_fingerpori_url': None,
+        'last_fingerpori_b_url': None,
+        'chat_id': None
         }
     
     setting_handlers = {
