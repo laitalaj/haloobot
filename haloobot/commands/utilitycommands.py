@@ -12,9 +12,11 @@ class BreakSilenceCommand(Command):
     comtext = 'breaksilence'
     minargs = 0
     helptext = 'Breaks silence'
+    requires_message = True
     
-    def run_command(self, args):
+    def run_command(self, args, msg):
         self.settings['silence'] = False
+        self.settings['chat_id'] = msg['chat']['id'] # "Haloobot is designed to work only in one chat" -laitalaj
         print('Broke silence!')
         return 'Silence broken!'
 

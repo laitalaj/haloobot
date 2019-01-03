@@ -2,6 +2,7 @@ import asyncio
 import schedule
 from haloobot.handlers.base import Handler
 from haloobot.utils import time
+from haloobot.utils import fingerpori
 
 class ScheduleHandler(Handler):
 
@@ -22,6 +23,7 @@ class ScheduleHandler(Handler):
     async def send_to_all(self):
         for result in self.tables['db'].query('SELECT DISTINCT chat_id FROM schedules'):
             await self.send_upcoming(result['chat_id'])
+        await self.send_daily_fingerpori(self.settings['chat_id'])
     
     async def send_upcoming(self, chat_id):
         ret = time.get_upcoming_events_string(self.tables['schedules'], chat_id)
@@ -30,5 +32,12 @@ class ScheduleHandler(Handler):
         else:
             return False
 
-
-
+    async def send_daily_fingerpori(self, chat_id):
+        url = await fingerpori.get_newest_fingerpori()
+        if(url != self.settings['last_fingerpori_url']):
+            await self.send_image(chat_id, url)
+            self.settings['last_fingerpori_url'] = url
+        url = await fingerpori.get_newest_fingerpori_b()
+        if(url != self.settings['last_fingerpori_b_url']):
+            await self.send_image(chat_id, url) 
+            self.settings['last_fingerpori_b_url'] = url

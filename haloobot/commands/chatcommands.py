@@ -180,7 +180,9 @@ class FingerporiCommand(Command):
     helptext = 'Gives you today\'s Fingerpori'
 
     async def run_command(self, args):
-        return (await get_newest_fingerpori(), 'image')
+        image_url = await get_newest_fingerpori()
+        self.settings['last_fingerpori_url'] = image_url
+        return (image_url, 'image')
 
 class FingerporiBCommand(Command):
 
@@ -189,7 +191,9 @@ class FingerporiBCommand(Command):
     helptext = 'Gives you today\'s alternative Fingerpori'
 
     async def run_command(self, args):
-        return (await get_newest_fingerpori_b(), 'image')
+        image_url = await get_newest_fingerpori_b()
+        self.settings['last_fingerpori_b_url'] = image_url
+        return (image_url, 'image')
 
 class RandomPoriCommand(Command):
 
