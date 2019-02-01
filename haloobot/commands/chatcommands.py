@@ -84,10 +84,15 @@ class AddAudioCommand(Command):
         if 'reply_to_message' not in msg:
             return 'To use addclip, please reply to the audio message containing the clip!'
         original_msg = msg['reply_to_message']
-        if 'audio' not in original_msg:
+        if 'audio' in original_msg:
+            audio = original_msg['audio']
+            atype = 'mp3'
+        elif 'voice' in original_msg:
+            audio = original_msg['voice']
+            atype = 'ogg'
+        else:
             return 'That message doesn\'t contain an audio clip!'
-        audio = original_msg['audio']
-        return (audio['file_id'], 'download', 'audio', args[0], 'Audio clip %s downloaded!' % args[0], 'Couldn\'t download the clip >:')
+        return (audio['file_id'], 'download', 'audio/{}'.format(atype), args[0], 'Audio clip %s downloaded!' % args[0], 'Couldn\'t download the clip >:')
 
 class GetExcuseCommand(Command):
 

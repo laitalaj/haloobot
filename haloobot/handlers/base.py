@@ -129,7 +129,9 @@ class Handler:
         if song:
             try:
                 print('Sending audio clip %s with file id' % filename)
-                await self.bot.sendAudio(chat_id, song['file_id'])
+                file_format = song['format'] # Very quick and dirty hack, hopefully it doesn't come back to haunt me
+                method = self.bot.sendVoice if file_format == 'ogg' else self.bot.sendAudio
+                await method(chat_id, song['file_id'])
                 return True
             except Exception as e:
                 print('Couldn\'t send audio: %s' % e)
@@ -152,15 +154,17 @@ class Handler:
                 return False
     
     async def download_file(self, file_id, file_type, filename):
-        if file_type == 'audio':
+        if file_type.startswith('audio'):
+            file_format = file_type.split('/')[1]
             if not os.path.exists(os.path.join('audio')):
                 os.makedirs('audio')
-            dest = os.path.join('audio', filename + '.mp3')
+            dest = os.path.join('audio', "{}.{}".format(filename, file_format))
             if os.path.exists(dest): #TODO: Refactor
                 print('Tried to overwrite a file!')
                 return False
             self.tables['songs'].insert({'name': filename,
-                                         'file_id': file_id})
+                                         'file_id': file_id,
+                                         'format': file_format})
         else:
             if not os.path.exists(os.path.join('etc')):
                 os.makedirs('etc')
