@@ -7,6 +7,7 @@ from haloobot.utils.time import temporary_setting_change
 from haloobot.utils.reddit import get_random_meme
 from haloobot.utils.excuse import getexcuse
 from haloobot.utils.fingerpori import get_newest_fingerpori, get_newest_fingerpori_b, get_random_fingerpori
+from haloobot.utils.fokit import get_newest_fokit, get_random_fokit
 from haloobot.utils.aijamatto import getmatto
 
 def add_all(commands, tables, messages, settings):
@@ -24,6 +25,8 @@ def add_all(commands, tables, messages, settings):
     FingerporiBCommand(commands, tables, messages, settings)
     RandomPoriCommand(commands, tables, messages, settings)
     MattoCommand(commands, tables, messages, settings)
+    FokitCommand(commands, tables, messages, settings)
+    RandomFokitCommand(commands, tables, messages, settings)
 
 class SendVoiceCommand(Command):
     
@@ -217,3 +220,21 @@ class MattoCommand(Command):
 
     async def run_command(self, args):
         return await getmatto()
+
+class FokitCommand(Command):
+    comtext = 'fokit'
+    minargs = 0
+    helptext = 'Gives you today\'s Fok_It'
+
+    async def run_command(self, args):
+        image_url = await get_newest_fokit()
+        self.settings['last_fokit_url'] = image_url
+        return (image_url, 'image')
+
+class RandomFokitCommand(Command):
+    comtext = 'randomfokit'
+    minargs = 0
+    helptext = 'Gives you a random Fok_It'
+
+    async def run_command(self, args):
+        return (await get_random_fokit(), 'image')

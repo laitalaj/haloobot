@@ -49,6 +49,7 @@ if __name__ == '__main__':
         'tts_cooldown_time': 600,
         'last_fingerpori_url': None,
         'last_fingerpori_b_url': None,
+        'last_fokit_url': None,
         'chat_id': None
         }
     
