@@ -3,6 +3,7 @@ import schedule
 from haloobot.handlers.base import Handler
 from haloobot.utils import time
 from haloobot.utils import fingerpori
+from haloobot.utils import fokit
 
 class ScheduleHandler(Handler):
 
@@ -24,6 +25,7 @@ class ScheduleHandler(Handler):
         for result in self.tables['db'].query('SELECT DISTINCT chat_id FROM schedules'):
             await self.send_upcoming(result['chat_id'])
         await self.send_daily_fingerpori(self.settings['chat_id'])
+        await self.send_daily_fokit(self.settings['chat_id'])
     
     async def send_upcoming(self, chat_id):
         ret = time.get_upcoming_events_string(self.tables['schedules'], chat_id)
@@ -41,3 +43,9 @@ class ScheduleHandler(Handler):
         if(url != self.settings['last_fingerpori_b_url']):
             await self.send_image(chat_id, url) 
             self.settings['last_fingerpori_b_url'] = url
+
+    async def send_daily_fokit(self, chat_id):
+        url = await fokit.get_newest_fokit()
+        if(url != self.settings['last_fokit_url']):
+            await self.send_image(chat_id, url)
+            self.settings['last_fokit_url'] = url
