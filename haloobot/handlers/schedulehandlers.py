@@ -7,7 +7,7 @@ from haloobot.utils import fokit
 
 class ScheduleHandler(Handler):
 
-    SCHEDULE_TIME = "10:00"
+    SCHEDULE_TIME = "10:05"
     MAX_SLEEP_TIME = 60*60
 
     def __init__(self, handlers, bot, tables, messages, settings):

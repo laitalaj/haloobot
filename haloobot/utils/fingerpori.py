@@ -20,7 +20,7 @@ async def get_newest_fingerpori():
 async def get_newest_fingerpori_b():
     return await _do_get_fingerpori(
         'http://www.kaleva.fi/fingerpori/',
-        lambda soup: soup.find(class_='comics__strip__image').get('src')
+        lambda soup: soup.find(class_='cartoon-strip__image').find('img').get('src')
     )
 
 async def get_random_fingerpori():
