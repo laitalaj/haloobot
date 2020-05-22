@@ -52,7 +52,7 @@ class ScheduleHandler(Handler):
             self.settings['last_fokit_url'] = url
 
     async def send_daily_smbc(self, chat_id):
-        url = await smbc.get_newest_smbc()
+        url, caption = await smbc.get_newest_smbc()
         if(url != self.settings['last_smbc_url']):
-            await self.send_image(chat_id, url)
+            await self.send_image(chat_id, url, caption)
             self.settings['last_smbc_url'] = url

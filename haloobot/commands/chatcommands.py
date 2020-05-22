@@ -249,9 +249,9 @@ class SmbcCommand(Command):
     helptext = 'Gives you today\'s SMBC'
 
     async def run_command(self, args):
-        image_url = await get_newest_smbc()
+        image_url, caption = await get_newest_smbc()
         self.settings['last_smbc_url'] = image_url
-        return (image_url, 'image')
+        return (image_url, 'image', caption)
 
 class RandomSmbcCommand(Command):
     comtext = 'randomsmbc'
@@ -259,4 +259,5 @@ class RandomSmbcCommand(Command):
     helptext = 'Gives you a random SMBC'
 
     async def run_command(self, args):
-        return (await get_random_smbc(), 'image')
+        image_url, caption = await get_random_smbc()
+        return (image_url, 'image', caption)

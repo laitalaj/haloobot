@@ -6,7 +6,8 @@ client = http3.AsyncClient()
 async def _do_get_smbc(url):
     r = await client.get(url)
     soup = BeautifulSoup(r.text, 'html.parser')
-    return soup.select('#cc-comicbody img')[0].get('src')
+    elem = soup.select('#cc-comicbody img')[0]
+    return elem.get('src'), elem.get('title')
 
 async def get_newest_smbc():
     return await _do_get_smbc('https://www.smbc-comics.com/')
