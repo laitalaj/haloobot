@@ -8,6 +8,7 @@ from haloobot.utils.reddit import get_random_meme
 from haloobot.utils.excuse import getexcuse
 from haloobot.utils.fingerpori import get_newest_fingerpori, get_newest_fingerpori_b, get_random_fingerpori
 from haloobot.utils.fokit import get_newest_fokit, get_random_fokit
+from haloobot.utils.smbc import get_newest_smbc, get_random_smbc
 from haloobot.utils.aijamatto import getmatto
 
 def add_all(commands, tables, messages, settings):
@@ -27,6 +28,8 @@ def add_all(commands, tables, messages, settings):
     MattoCommand(commands, tables, messages, settings)
     FokitCommand(commands, tables, messages, settings)
     RandomFokitCommand(commands, tables, messages, settings)
+    SmbcCommand(commands, tables, messages, settings)
+    RandomSmbcCommand(commands, tables, messages, settings)
 
 class SendVoiceCommand(Command):
     
@@ -238,3 +241,22 @@ class RandomFokitCommand(Command):
 
     async def run_command(self, args):
         return (await get_random_fokit(), 'image')
+
+class SmbcCommand(Command):
+
+    comtext = 'smbc'
+    minargs = 0
+    helptext = 'Gives you today\'s SMBC'
+
+    async def run_command(self, args):
+        image_url = await get_newest_smbc()
+        self.settings['last_smbc_url'] = image_url
+        return (image_url, 'image')
+
+class RandomSmbcCommand(Command):
+    comtext = 'randomsmbc'
+    minargs = 0
+    helptext = 'Gives you a random SMBC'
+
+    async def run_command(self, args):
+        return (await get_random_smbc(), 'image')

@@ -4,6 +4,7 @@ from haloobot.handlers.base import Handler
 from haloobot.utils import time
 from haloobot.utils import fingerpori
 from haloobot.utils import fokit
+from haloobot.utils import smbc
 
 class ScheduleHandler(Handler):
 
@@ -49,3 +50,9 @@ class ScheduleHandler(Handler):
         if(url != self.settings['last_fokit_url']):
             await self.send_image(chat_id, url)
             self.settings['last_fokit_url'] = url
+
+    async def send_daily_smbc(self, chat_id):
+        url = await smbc.get_newest_smbc()
+        if(url != self.settings['last_smbc_url']):
+            await self.send_image(chat_id, url)
+            self.settings['last_smbc_url'] = url

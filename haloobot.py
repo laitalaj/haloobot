@@ -50,6 +50,7 @@ if __name__ == '__main__':
         'last_fingerpori_url': None,
         'last_fingerpori_b_url': None,
         'last_fokit_url': None,
+        'last_smbc_url': None,
         'chat_id': None
         }
     
