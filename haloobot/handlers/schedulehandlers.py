@@ -27,6 +27,7 @@ class ScheduleHandler(Handler):
             await self.send_upcoming(result['chat_id'])
         await self.send_daily_fingerpori(self.settings['chat_id'])
         await self.send_daily_fokit(self.settings['chat_id'])
+        await self.send_daily_smbc(self.settings['chat_id'])
     
     async def send_upcoming(self, chat_id):
         ret = time.get_upcoming_events_string(self.tables['schedules'], chat_id)
