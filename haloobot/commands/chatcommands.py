@@ -17,6 +17,7 @@ def add_all(commands, tables, messages, settings):
     ListAudioCommand(commands, tables, messages, settings)
     GetExcuseCommand(commands, tables, messages, settings)
     AddAudioCommand(commands, tables, messages, settings)
+    RemoveAudioCommand(commands, tables, messages, settings)
     GetMemeCommand(commands, tables, messages, settings)
     AddMemeSourceCommand(commands, tables, messages, settings)
     ListMemeSourcesCommand(commands, tables, messages, settings)
@@ -99,6 +100,15 @@ class AddAudioCommand(Command):
         else:
             return 'That message doesn\'t contain an audio clip!'
         return (audio['file_id'], 'download', 'audio/{}'.format(atype), args[0], 'Audio clip %s downloaded!' % args[0], 'Couldn\'t download the clip >:')
+
+class RemoveAudioCommand(Command):
+
+    comtext = 'rmclip'
+    minargs = 1
+    helptext = 'Removes audio clip. Usage: /rmclip "[clip name]"'
+
+    def run_command(self, args):
+        return (args[0], 'rm', 'audio', 'Audio clip %s removed! (or it didn\'t exist at all)' % args[0], 'Couldn\'t remove %s >:' % args[0])
 
 class GetExcuseCommand(Command):
 

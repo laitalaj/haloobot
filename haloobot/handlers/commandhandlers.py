@@ -46,6 +46,12 @@ class CommandHandler(Handler):
                             await self.send_message(chat_id, response[4])
                         else:
                             await self.send_message(chat_id, response[5])
+                    elif response[1] == 'rm': # (filename, 'rm', file_type, success_message, fail_message)
+                        success = await self.remove_file(response[0], response[2])
+                        if success:
+                            await self.send_message(chat_id, response[3])
+                        else:
+                            await self.send_message(chat_id, response[4])
                     elif len(response) > 1:
                         await self.send_message(chat_id, response[0], parse_mode = response[1])
                     else:

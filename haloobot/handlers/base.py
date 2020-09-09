@@ -120,7 +120,7 @@ class Handler:
     async def send_audio(self, chat_id, filename):
         if self.settings['silence']:
             return True
-        trimmer = re.compile('[^\w]+') #Make sure that no-one accesses something they shouldn't
+        trimmer = re.compile('[^\w-]+') #Make sure that no-one accesses something they shouldn't
         filename = trimmer.sub('', filename)
         if 'name' in self.tables['songs'].columns:
             song = self.tables['songs'].find_one(name = filename)
@@ -140,7 +140,7 @@ class Handler:
             audiopath = os.path.join('audio', filename + '.mp3')
             if not os.path.isfile(audiopath):
                 print('Tried to send a non-existing clip %s' % filename)
-                self.send_message(chat_id, "I don\'t have a clip called %s!" % filename)
+                await self.send_message(chat_id, "I don\'t have a clip called %s!" % filename)
                 return False
             try:
                 with open(audiopath, 'rb') as audio:
@@ -154,6 +154,9 @@ class Handler:
                 return False
     
     async def download_file(self, file_id, file_type, filename):
+        trimmer = re.compile('[^\w-]+') #Make sure that no-one accesses something they shouldn't
+        filename = trimmer.sub('', filename)
+
         if file_type.startswith('audio'):
             file_format = file_type.split('/')[1]
             if not os.path.exists(os.path.join('audio')):
@@ -179,6 +182,27 @@ class Handler:
             print('Couldn\'t download file ...%s to %s - %s' % (file_id[-8:], dest, e))
             return False
         return True
-    
+
+    async def remove_file(self, filename, file_type):
+        trimmer = re.compile('[^\w-]+') #Make sure that no-one accesses something they shouldn't
+        filename = trimmer.sub('', filename)
+
+        def do_remove(d):
+            if os.path.exists(d):
+                matches = [os.path.join(d, f) for f in os.listdir(d) if f.startswith(filename)]
+                for m in matches:
+                    os.remove(m)
+                    print('Removed {}'.format(m))
+
+        if file_type.startswith('audio'):
+            do_remove('audio')
+            if 'name' in self.tables['songs'].columns:
+                self.tables['songs'].delete(name = filename)
+                print('Deleted {} from the song table'.format(filename))
+            return True
+        else:
+            do_remove('etc')
+            return True
+
     async def do_handle(self, msg):
         return False

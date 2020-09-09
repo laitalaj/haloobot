@@ -7,6 +7,8 @@
 
 # Instance-specific haloobot stuff
 haloosettings
+audio
+etc
 *.db
 
 ##########
