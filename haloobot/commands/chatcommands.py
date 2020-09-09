@@ -116,8 +116,9 @@ class GetExcuseCommand(Command):
     minargs = 0
     helptext = '''Get an excuse as to why you're code a shit'''
 
-    def run_command(self, args):
-        return getexcuse()
+    async def run_command(self, args):
+        print('Getting an excuse...')
+        return await getexcuse()
 
 class GetMemeCommand(Command):
 
