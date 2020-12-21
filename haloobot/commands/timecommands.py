@@ -93,7 +93,7 @@ class AddOneOffEventCommand(AddEventCommand):
 
     comtext = 'addoneoff'
     minargs = 2
-    helptext = 'Adds an one-off event. Syntax: /addevent "[event name]" "[event date]" "[optional: event countdown in days]"'
+    helptext = 'Adds an one-off event. Syntax: /addoneoff "[event name]" "[event date]" "[optional: event countdown in days]"'
     requires_message = True
     is_oneoff = True
 
