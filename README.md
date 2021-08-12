@@ -14,7 +14,9 @@ Quickstart:
   * `password = <password for bot owner specific commands>`
 5. Run haloobot.py
 6. Add the bot to some conversation
-7. Give haloobot a /breaksilence to break initial silence and then go for /listcommands
+7. Give haloobot a `/breaksilence "password"`
+(the password for breaking initial silence is printed in the stdout)
+to break initial silence and then go for `/listcommands`
 
 I might document this a bit more someday. Maybe.
 

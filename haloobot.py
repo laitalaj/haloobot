@@ -6,6 +6,8 @@ if __name__ == '__main__':
     import re
     import dataset
     import asyncio
+    import random
+    import string
     import sys
     import time
     import signal
@@ -41,6 +43,7 @@ if __name__ == '__main__':
         'password': 'please',
         'trigger': int(tables['settings'].find_one(type = "trigger")['value']) / 100,
         'silence': True,
+        'silence_password': ''.join(random.choice(string.ascii_lowercase) for _ in range(6)),
         'praise_length': 50,
         'tts_cooldown': False,
         'tts_id': 0,
@@ -106,5 +109,7 @@ if __name__ == '__main__':
     # See https://stackoverflow.com/a/37420223
     signal.signal(signal.SIGINT, signal.SIG_DFL)
 
+    print()
+    print('INITIAL SILENCE PASSWORD IS:', settings['silence_password'])
     print('--- READY TO MEME ---')
     loop.run_forever()

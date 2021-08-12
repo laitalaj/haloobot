@@ -3,6 +3,7 @@ from subprocess import check_output
 from emoji import emojize
 from haloobot.commands.base import Command
 from haloobot.utils.blame import praise
+from haloobot.utils.commands import return_if_silent
 from haloobot.utils.time import temporary_setting_change
 from haloobot.utils.reddit import get_random_meme
 from haloobot.utils.excuse import getexcuse
@@ -116,6 +117,7 @@ class GetExcuseCommand(Command):
     minargs = 0
     helptext = '''Get an excuse as to why you're code a shit'''
 
+    @return_if_silent
     async def run_command(self, args):
         print('Getting an excuse...')
         return await getexcuse()
@@ -126,6 +128,7 @@ class GetMemeCommand(Command):
     minargs = 0
     helptext = 'Get a random fresh new meme from Reddit. You can optionally specify the subreddit with /getmeme "[subreddit]".'
 
+    @return_if_silent
     async def run_command(self, args):
         _, meme_msg = await get_random_meme(subreddit = args[0] if len(args) > 0 else None, db = self.tables['db'])
         return meme_msg
@@ -201,6 +204,7 @@ class FingerporiCommand(Command):
     minargs = 0
     helptext = 'Gives you today\'s Fingerpori'
 
+    @return_if_silent
     async def run_command(self, args):
         image_url = await get_newest_fingerpori()
         self.settings['last_fingerpori_url'] = image_url
@@ -212,6 +216,7 @@ class FingerporiBCommand(Command):
     minargs = 0
     helptext = 'Gives you today\'s alternative Fingerpori'
 
+    @return_if_silent
     async def run_command(self, args):
         image_url = await get_newest_fingerpori_b()
         self.settings['last_fingerpori_b_url'] = image_url
@@ -223,6 +228,7 @@ class RandomPoriCommand(Command):
     minargs = 0
     helptext = 'Gives you a random Fingerpori'
 
+    @return_if_silent
     async def run_command(self, args):
         return (await get_random_fingerpori(), 'image')
 
@@ -232,6 +238,7 @@ class MattoCommand(Command):
     minargs = 0
     helptext = 'Moro dude :D mitä dude.'
 
+    @return_if_silent
     async def run_command(self, args):
         return await getmatto()
 
@@ -240,6 +247,7 @@ class FokitCommand(Command):
     minargs = 0
     helptext = 'Gives you today\'s Fok_It'
 
+    @return_if_silent
     async def run_command(self, args):
         image_url = await get_newest_fokit()
         self.settings['last_fokit_url'] = image_url
@@ -250,6 +258,7 @@ class RandomFokitCommand(Command):
     minargs = 0
     helptext = 'Gives you a random Fok_It'
 
+    @return_if_silent
     async def run_command(self, args):
         return (await get_random_fokit(), 'image')
 
@@ -259,6 +268,7 @@ class SmbcCommand(Command):
     minargs = 0
     helptext = 'Gives you today\'s SMBC'
 
+    @return_if_silent
     async def run_command(self, args):
         image_url, caption = await get_newest_smbc()
         self.settings['last_smbc_url'] = image_url
@@ -269,6 +279,7 @@ class RandomSmbcCommand(Command):
     minargs = 0
     helptext = 'Gives you a random SMBC'
 
+    @return_if_silent
     async def run_command(self, args):
         image_url, caption = await get_random_smbc()
         return (image_url, 'image', caption)
