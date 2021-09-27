@@ -75,26 +75,37 @@ class StickerHandler(Handler):
     def process_sticker(self, msg, update_stats = True):
         if update_stats:
             speakercounters.update_speaker_stickers(msg, self.tables)
+
         sticker = msg['sticker']
         if self.tables['stickers'].insert_ignore({'file_id': sticker['file_id']}, ['file_id']):
             print('Added new sticker ...%s!' % sticker['file_id'][-8:])
+
         if 'emoji' in sticker: # Keep that old db working and the emoji up to date
             self.tables['stickers'].update({'file_id': sticker['file_id'], 'emoji': sticker['emoji']}, ['file_id'])
+
         if random.random() < self.settings['trigger']:
             if update_stats:
                 speakercounters.update_speaker_triggers(msg, self.tables)
+
             to_send = None
-            for emoji in sticker['emoji']:
-                if emoji in '();/*-': # Should hinder any SQL injetions in case someone manages to feed non-emojis through the api
-                    continue
-                try:
-                    results = self.tables['db'].query('SELECT * FROM stickers WHERE emoji LIKE \'%{}%\' ORDER BY RANDOM()'.format(emoji))
-                    to_send = results.next()
-                    while to_send['file_id'] == sticker['file_id']:
+            bad_chars = '();/*-'
+            if 'emoji' in sticker:
+                for emoji in sticker['emoji']:
+                    if any(c in emoji for c in bad_chars): # Should hinder any SQL injetions in case someone manages to feed non-emojis through the api
+                        continue
+
+                    try:
+                        results = self.tables['db'].query('SELECT * FROM stickers WHERE emoji LIKE \'%{}%\' ORDER BY RANDOM()'.format(emoji))
                         to_send = results.next()
-                except StopIteration:
-                    to_send = None
-            if to_send == None:
+                        while to_send['file_id'] == sticker['file_id']:
+                            to_send = results.next()
+                    except StopIteration:
+                        to_send = None
+
+                    if to_send is not None:
+                        break
+
+            if to_send is None:
                 to_send = self.tables['db'].query('SELECT * FROM stickers ORDER BY RANDOM() LIMIT 1').next()
                 print('Didn\'t find any differing stickers with matching emoji >:')
             return to_send
@@ -147,27 +158,32 @@ class ReplyHandler(TextHandler, StickerHandler):
     async def do_handle(self, msg):
         content_type, _, chat_id = telepot.glance(msg)
         msg_id = msg['message_id']
+
         if msg['reply_to_message']['from']['username'] != self.settings['name']:
             return False
+
         oldtrigger = self.settings['trigger']
         self.settings['trigger'] = 1.0
-        if content_type == 'sticker':
-            reply = self.process_sticker(msg, False)
-        else:
-            message = self.process_msg(msg, False)
-            reply = 'Thank you for replying! '
-            reply += random.choice(self.reply_starts)
-            if message:
-                random.shuffle(message)
-                reply += ' '.join(message)
+
+        try:
+            if content_type == 'sticker':
+                reply = self.process_sticker(msg, False)
             else:
-                reply += 'nothing.'
-        self.settings['trigger'] = oldtrigger
+                message = self.process_msg(msg, False)
+                reply = 'Thank you for replying! '
+                reply += random.choice(self.reply_starts)
+                if message:
+                    random.shuffle(message)
+                    reply += ' '.join(message)
+                else:
+                    reply += 'nothing.'
+        finally:
+            self.settings['trigger'] = oldtrigger
+
         if content_type == 'sticker':
             await self.send_sticker(chat_id, reply['file_id'], msg_id)
         else:
             await self.send_reply(chat_id, msg_id, reply)
+
         print('Replied to %s' % msg_id)
         return True
-
-
