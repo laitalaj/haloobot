@@ -2,7 +2,7 @@ import aiohttp, json
 
 async def getexcuse():
     async with aiohttp.ClientSession() as http:
-        async with http.get('https://ohjelmointitekosyyt.fi/.netlify/functions/excuse') as r:
+        async with http.get('http://ohjelmointitekosyyt.fi/.netlify/functions/excuse') as r:
             try:
                 obj = json.loads(await r.text())
                 return obj["excuse"]
