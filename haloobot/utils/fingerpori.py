@@ -15,7 +15,8 @@ async def _do_get_fingerpori(url, get_comic_url):
             return get_comic_url(soup)
 
 async def get_newest_fingerpori():
-    return await _do_get_fingerpori('https://www.hs.fi/fingerpori/', parse_hs_fingerpori_url)
+    url = 'https://www.hs.fi/rest/laneitems/39221/moreItems?from=0&pageId=290&even=false'
+    return await _do_get_fingerpori(url, parse_hs_fingerpori_url)
 
 async def get_newest_fingerpori_b():
     return await _do_get_fingerpori(
